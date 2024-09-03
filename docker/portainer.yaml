@@ -1,0 +1,21 @@
+version: "3"
+
+volumes:
+  portainer_data:
+
+services:
+  portainer:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer.rule=PathPrefix(`/portainer`)"
+      - "traefik.http.routers.portainer.middlewares=portainer-pathstrip@docker"
+      - "traefik.http.middlewares.portainer-pathstrip.stripprefix.prefixes=/portainer"
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    ports:
+      - 9000:9000
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always

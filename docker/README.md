@@ -1,29 +1,34 @@
-## Init
+## Initial Setup
 ```bash
-make init  # init the base docker stack.
-make monitor  # init services for monitoring.
+make init  # init portainer
 ```
 
-## Available Services
-```bash
-# base.yaml
-http://hostname/portainer/
-http://hostname/filebrowser/
-# monitor.yaml
-http://hostname/dozzle/
-http://hostname/grafana/
-```
+Open http://localhost:9000/
 
-## Setup (Common)
-- Connect to http://hostname/portainer/
-- Stacks -> Add stack
-- Copy and paste the yaml files
+## Adding Stacks
+1. Open portainer
+2. Stack -> Add stack
+3. Repository
+4. Add stack inforamtion
 
-## Flowise
-- `Load variables from .env file`
-  - vector-admin.env
-  - chromadb.env
-  - flowise.env
+## Basic Service Setup
+- network.yaml
+    - traefik
+- utils.yaml
+    - filebrowser
+
+## Additional Services
+- monitor.yaml
+    - dozzle
+    - dcgm exporter
+    - prometheus
+    - grafana
+- flowise.yaml
+    - ollma
+    - flowise
+    - postgres
+    - chromadb
+    - vectoradmin
 
 ## References
 - https://github.com/hongshibao/gpu-monitoring-docker-compose

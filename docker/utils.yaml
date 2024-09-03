@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  filebrowser:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.filebrowser.loadbalancer.server.port=8080"
+      - "traefik.http.routers.filebrowser.rule=PathPrefix(`/filebrowser`)"
+      - "traefik.http.routers.filebrowser.service=filebrowser"
+    image: hurlenko/filebrowser:latest
+    container_name: filebrowser
+    user: 1000:1000
+    volumes:
+      - $HOME:/data/home
+    environment:
+      - FB_BASEURL=/filebrowser
+    restart: always
