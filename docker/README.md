@@ -4,10 +4,16 @@ make init  # init the base docker stack.
 make monitor  # init services for monitoring.
 ```
 
-## Setup
+## Setup (Common)
 - Connect to http://hostname/portainer/
 - Stacks -> Add stack
 - Copy and paste the yaml files
+
+## Flowise
+- `Load variables from .env file`
+  - vector-admin.env
+  - chromadb.env
+  - flowise.env
 
 ## References
 - https://github.com/hongshibao/gpu-monitoring-docker-compose
