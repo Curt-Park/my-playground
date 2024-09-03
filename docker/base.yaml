@@ -26,7 +26,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
       - "traefik.http.routers.portainer.rule=PathPrefix(`/portainer`)"
-      # NOTE: middleware only works for portainer
       - "traefik.http.routers.portainer.middlewares=portainer-pathstrip@docker"
       - "traefik.http.middlewares.portainer-pathstrip.stripprefix.prefixes=/portainer"
     image: portainer/portainer-ce:latest
