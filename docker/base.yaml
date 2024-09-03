@@ -1,0 +1,52 @@
+version: "3"
+
+volumes:
+  portainer_data:
+
+services:
+  traefik:
+    image: traefik:v3.1.2
+    container_name: reverse-proxy
+    command:
+      # Enable Docker in Traefik, so that it reads labels from Docker services
+      - "--providers.docker=true"
+      # Allow HTTP access
+      - "--api.insecure=true"
+    ports:
+      # The HTTP port
+      - 80:80
+      # The traefik dashboard port (enabled by --api.insecure=true)
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
+
+  portainer:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer.rule=PathPrefix(`/portainer`)"
+      # NOTE: middleware only works for portainer
+      - "traefik.http.routers.portainer.middlewares=portainer-pathstrip@docker"
+      - "traefik.http.middlewares.portainer-pathstrip.stripprefix.prefixes=/portainer"
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  filebrowser:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.filebrowser.loadbalancer.server.port=8080"
+      - "traefik.http.routers.filebrowser.rule=PathPrefix(`/filebrowser`)"
+      - "traefik.http.routers.filebrowser.service=filebrowser"
+    image: hurlenko/filebrowser:latest
+    container_name: filebrowser
+    user: 1000:1000
+    volumes:
+      - $HOME:/data/home
+    environment:
+      - FB_BASEURL=/filebrowser
+    restart: always
