@@ -1,9 +1,8 @@
-## Initial Setup
+## Commnads
 ```bash
-make init  # init portainer
+make init  # then, open http://localhost:9000/
+make down
 ```
-
-Open http://localhost:9000/
 
 ## Adding Stacks
 1. Open portainer
@@ -11,7 +10,7 @@ Open http://localhost:9000/
 3. Repository
 4. Add stack inforamtion
 
-## Basic Service Setup
+## Basic Service Setups
 - network.yaml
     - traefik
 - utils.yaml
