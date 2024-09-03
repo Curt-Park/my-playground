@@ -4,6 +4,16 @@ make init  # init the base docker stack.
 make monitor  # init services for monitoring.
 ```
 
+## Available Services
+```bash
+# base.yaml
+http://hostname/portainer/
+http://hostname/filebrowser/
+# monitor.yaml
+http://hostname/dozzle/
+http://hostname/grafana/
+```
+
 ## Setup (Common)
 - Connect to http://hostname/portainer/
 - Stacks -> Add stack
