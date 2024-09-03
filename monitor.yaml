@@ -5,8 +5,8 @@ volumes:
   grafana_data: {}
 
 networks:
-  default:
-    name: docker_default
+  ingress:
+    name: ingress
     external: true
 
 services:
@@ -23,6 +23,8 @@ services:
       - DOZZLE_BASE=/dozzle
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - ingress
     restart: always
 
   dcgm-exporter:
@@ -39,6 +41,8 @@ services:
             - driver: nvidia
               count: all
               capabilities: [ gpu ]
+    networks:
+      - ingress
     restart: always
 
   prometheus:
@@ -53,6 +57,8 @@ services:
     volumes:
       - ./configs/monitor/gpu-metrics-prometheus-config.yaml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
+    networks:
+      - ingress
     restart: always
 
   grafana:
@@ -74,4 +80,6 @@ services:
       - grafana_data:/var/lib/grafana
       - ./configs/monitor/grafana_provisioning:/etc/grafana/provisioning:ro
       - ./configs/monitor/grafana_dashboards:/etc/dashboards:ro
+    networks:
+      - ingress
     restart: always

@@ -1,5 +1,10 @@
 version: "3"
 
+networks:
+  ingress:
+    name: ingress
+    external: true
+
 services:
   filebrowser:
     labels:
@@ -14,4 +19,6 @@ services:
       - $HOME:/data/home
     environment:
       - FB_BASEURL=/filebrowser
+    networks:
+      - ingress
     restart: always

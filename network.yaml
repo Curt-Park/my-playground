@@ -1,5 +1,10 @@
 version: "3"
 
+networks:
+  ingress:
+    name: ingress
+    external: true
+
 services:
   traefik:
     image: traefik:v3.1.2
@@ -16,4 +21,6 @@ services:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - ingress
     restart: always

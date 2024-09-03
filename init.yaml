@@ -1,5 +1,10 @@
 version: "3"
 
+networks:
+  ingress:
+    name: ingress
+    external: true
+
 volumes:
   portainer_data:
 
@@ -18,4 +23,6 @@ services:
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ingress
     restart: always
