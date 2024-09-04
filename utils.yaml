@@ -7,7 +7,6 @@ networks:
 
 volumes:
   configs:
-    name: configs
     external: true
 
 services:
