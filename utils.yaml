@@ -18,7 +18,6 @@ services:
       - "traefik.http.routers.filebrowser.service=filebrowser"
     image: hurlenko/filebrowser:latest
     container_name: filebrowser
-    user: 1000:1000
     volumes:
       - configs:/data/configs
     environment:
