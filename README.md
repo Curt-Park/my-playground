@@ -18,17 +18,20 @@ make down
 - Copy all files in `configs` into `configs` in filebrowser
 
 ## Additional Services
-- monitor.yaml
-    - dozzle
+- init.yaml & network.yaml
+    - portainer: http://host/portainer/
+    - traefik: http://host/ && http://host:8080/
+- monitor.yaml (dependent on utils.yaml)
+    - dozzle: http://host/dozzle/
+    - grafana: http://host/grafana/
     - dcgm exporter
     - prometheus
-    - grafana
 - flowise.yaml
+    - flowise: http://host/flowise/
+    - vectoradmin: http://host/vectoradmin/
     - ollma
-    - flowise
     - postgres
     - chromadb
-    - vectoradmin
 
 ## References
 - https://github.com/hongshibao/gpu-monitoring-docker-compose
