@@ -11,10 +11,11 @@ make down
 4. Add stack inforamtion
 
 ## Basic Service Setups
-- network.yaml
+- Add `network.yaml`
     - traefik
-- utils.yaml
+- Add `utils.yaml`
     - filebrowser
+- Copy all files in `configs` into `configs` in filebrowser
 
 ## Additional Services
 - monitor.yaml

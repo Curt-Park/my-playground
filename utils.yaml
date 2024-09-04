@@ -16,7 +16,9 @@ services:
     container_name: filebrowser
     user: 1000:1000
     volumes:
-      - $HOME:/data/home
+      - configs:/data/configs
+    volumes-from:
+      - portainer
     environment:
       - FB_BASEURL=/filebrowser
     networks:
