@@ -43,8 +43,6 @@ services:
       POSTGRES_USER: flowise
       POSTGRES_PASSWORD: flowise
       POSTGRES_DB: flowise
-    ports:
-      - 5432:5432
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:
@@ -97,6 +95,12 @@ services:
 
   vector-admin:
     image: mintplexlabs/vectoradmin
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.vectoradmin.loadbalancer.server.port=3001"
+      - "traefik.http.routers.vectoradmin.rule=PathPrefix(`/vectoradmin`)"
+      - "traefik.http.routers.vectoradmin.middlewares=vectoradmin-pathstrip@docker"
+      - "traefik.http.middlewares.vectoradmin-pathstrip.stripprefix.prefixes=/vectoradmin"
     environment:
       SERVER_PORT: 3001
       JWT_SECRET: "your-random-string-here"
