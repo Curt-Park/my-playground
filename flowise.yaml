@@ -98,7 +98,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.vectoradmin.rule=PathPrefix(`/vectoradmin`)"
-      - "traefik.http.routers.vectoradmin.middlewares=flowise-redirect-to-port"
+      - "traefik.http.routers.vectoradmin.middlewares=vectoradmin-redirect-to-port"
       - "traefik.http.middlewares.vectoradmin-redirect-to-port.redirectregex.regex=^http://(.*)/vectoradmin/(.*)"
       - "traefik.http.middlewares.vectoradmin-redirect-to-port.redirectregex.replacement=http://$${1}:3001/$${2}"
     ports:
