@@ -17,8 +17,6 @@ services:
     user: 1000:1000
     volumes:
       - configs:/data/configs
-    volumes-from:
-      - portainer
     environment:
       - FB_BASEURL=/filebrowser
     networks:
