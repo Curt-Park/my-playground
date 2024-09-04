@@ -5,6 +5,11 @@ networks:
     name: ingress
     external: true
 
+volumes:
+  configs:
+    name: configs
+    external: true
+
 services:
   filebrowser:
     labels:
