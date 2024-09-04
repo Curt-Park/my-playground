@@ -53,10 +53,10 @@ services:
     image: flowiseai/flowise:2.0.7
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.flowise.loadbalancer.server.port=3000"
       - "traefik.http.routers.flowise.rule=PathPrefix(`/flowise`)"
-      - "traefik.http.routers.flowise.middlewares=flowise-pathstrip@docker"
-      - "traefik.http.middlewares.flowise-pathstrip.stripprefix.prefixes=/flowise"
+      - "traefik.http.routers.flowise.middlewares=flowise-redirect-to-port"
+      - "traefik.http.middlewares.flowise-redirect-to-port.redirectregex.regex=^http://(.*)/flowise/(.*)"
+      - "traefik.http.middlewares.flowise-redirect-to-port.redirectregex.replacement=http://$${1}:3000/$${2}"
     ports:
       - 3000:3000
     environment:
@@ -99,10 +99,10 @@ services:
     image: mintplexlabs/vectoradmin
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.vectoradmin.loadbalancer.server.port=3001"
       - "traefik.http.routers.vectoradmin.rule=PathPrefix(`/vectoradmin`)"
-      - "traefik.http.routers.vectoradmin.middlewares=vectoradmin-pathstrip@docker"
-      - "traefik.http.middlewares.vectoradmin-pathstrip.stripprefix.prefixes=/vectoradmin"
+      - "traefik.http.routers.vectoradmin.middlewares=flowise-redirect-to-port"
+      - "traefik.http.middlewares.vectoradmin-redirect-to-port.redirectregex.regex=^http://(.*)/vectoradmin/(.*)"
+      - "traefik.http.middlewares.vectoradmin-redirect-to-port.redirectregex.replacement=http://$${1}:3001/$${2}"
     ports:
       - 3001:3001
     environment:
