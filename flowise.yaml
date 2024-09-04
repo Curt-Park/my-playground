@@ -1,6 +1,7 @@
 version: "3"
 
 networks:
+  flowise: {}
   ingress:
     name: ingress
     external: true
@@ -32,7 +33,9 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-    restart: unless-stopped
+    networks:
+      - flowise
+    restart: always
 
   postgres:
     image: postgres:16
@@ -44,6 +47,8 @@ services:
       - 5432:5432
     volumes:
       - postgres:/var/lib/postgresql/data
+    networks:
+      - flowise
     restart: always
 
   flowise:
@@ -64,8 +69,8 @@ services:
     volumes:
       - flowise:/root/.flowise
     networks:
+      - flowise
       - ingress
-      - flowise_default
     depends_on:
       - postgres
     restart: always
@@ -86,6 +91,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    networks:
+      - flowise
+    restart: always
 
   vector-admin:
     image: mintplexlabs/vectoradmin
@@ -99,6 +107,8 @@ services:
     volumes:
       - vectoradmin-storage:/app/backend/storage
       - vectoradmin-hotdir:/app/document-processor/hotdir
+    networks:
+      - flowise
     depends_on:
       - postgres
-    restart: unless-stopped # possible values are: "no", always", "on-failure", "unless-stopped"
+    restart: always
