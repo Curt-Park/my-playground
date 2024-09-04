@@ -1,6 +1,6 @@
 ## Commnads
 ```bash
-make init  # then, open http://localhost:9000/
+make init  # then, open http://hostname:9000/
 make down
 ```
 
@@ -19,16 +19,16 @@ make down
 
 ## Additional Services
 - init.yaml & network.yaml
-    - portainer: http://host/portainer/
-    - traefik: http://host/ && http://host:8080/
+    - portainer: http://hostname/portainer/
+    - traefik: http://hostname/ && http://hostname:8080/
 - monitor.yaml (dependent on utils.yaml)
-    - dozzle: http://host/dozzle/
-    - grafana: http://host/grafana/
+    - dozzle: http://hostname/dozzle/
+    - grafana: http://hostname/grafana/
     - dcgm exporter
     - prometheus
 - flowise.yaml
-    - flowise: http://host/flowise/
-    - vectoradmin: http://host/vectoradmin/
+    - flowise: http://hostname/flowise/
+    - vectoradmin: http://hostname/vectoradmin/
     - ollma
     - postgres
     - chromadb
