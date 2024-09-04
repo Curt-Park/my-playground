@@ -21,7 +21,9 @@ make down
 - init.yaml & network.yaml
     - portainer: http://hostname/portainer/
     - traefik: http://hostname/ && http://hostname:8080/
-- monitor.yaml (dependent on utils.yaml)
+- utils.yaml
+    - filebrowser: http://hostname/filebrowser/
+- monitor.yaml (dependent on `configs` in `filebrowser`)
     - dozzle: http://hostname/dozzle/
     - grafana: http://hostname/grafana/
     - dcgm exporter
