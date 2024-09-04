@@ -57,6 +57,8 @@ services:
       - "traefik.http.routers.flowise.rule=PathPrefix(`/flowise`)"
       - "traefik.http.routers.flowise.middlewares=flowise-pathstrip@docker"
       - "traefik.http.middlewares.flowise-pathstrip.stripprefix.prefixes=/flowise"
+    ports:
+      - 3000:3000
     environment:
       DATABASE_TYPE: postgres
       DATABASE_PORT: 5432
@@ -101,6 +103,8 @@ services:
       - "traefik.http.routers.vectoradmin.rule=PathPrefix(`/vectoradmin`)"
       - "traefik.http.routers.vectoradmin.middlewares=vectoradmin-pathstrip@docker"
       - "traefik.http.middlewares.vectoradmin-pathstrip.stripprefix.prefixes=/vectoradmin"
+    ports:
+      - 3001:3001
     environment:
       SERVER_PORT: 3001
       JWT_SECRET: "your-random-string-here"
