@@ -52,7 +52,7 @@ services:
       - --web.console.templates=/usr/share/prometheus/consoles
       - --storage.tsdb.retention.time=14d
     volumes:
-      - ./configs/monitor/gpu-metrics-prometheus-config.yaml:/etc/prometheus/prometheus.yml:ro
+      - /var/lib/docker/volumes/configs/_data/monitor/gpu-metrics-prometheus-config.yaml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
     networks:
       - ingress
@@ -74,8 +74,8 @@ services:
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./configs/monitor/grafana_provisioning:/etc/grafana/provisioning:ro
-      - ./configs/monitor/grafana_dashboards:/etc/dashboards:ro
+      - /var/lib/docker/volumes/configs/_data/monitor/grafana_provisioning:/etc/grafana/provisioning:ro
+      - /var/lib/docker/volumes/configs/_data/monitor/grafana_dashboards:/etc/dashboards:ro
     networks:
       - ingress
     restart: always
