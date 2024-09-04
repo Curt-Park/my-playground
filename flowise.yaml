@@ -65,6 +65,7 @@ services:
       - flowise:/root/.flowise
     networks:
       - ingress
+      - flowise_default
     depends_on:
       - postgres
     restart: always
