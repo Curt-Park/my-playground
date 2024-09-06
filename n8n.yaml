@@ -1,0 +1,57 @@
+# https://docs.n8n.io/hosting/installation/server-setups/docker-compose
+version: "3"
+
+networks:
+  n8n: {}
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  n8n_data: {}
+
+services:
+  traefik:
+    image: "traefik"
+    restart: always
+    command:
+      - "--api=true"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
+      - "--certificatesresolvers.mytlschallenge.acme.email=${SSL_EMAIL}"
+      - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - traefik_data:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+      - "traefik.http.routers.n8n.rule=PathPrefix(`/n8n`)"
+      - "traefik.http.routers.n8n.service=dozzle"
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=${DOMAIN_NAME}/n8n
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://${DOMAIN_NAME}/n8n/
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+    networks:
+      - n8n
+      - ingress
+    volumes:
+      - n8n_data:/home/node/.n8n
