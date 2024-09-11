@@ -34,6 +34,9 @@ make down
     - ollma
     - postgres
     - chromadb
+- n8n.yaml
+    - n8n: http://hostname/n8n/
+    - postgres
 
 ## References
 - https://github.com/hongshibao/gpu-monitoring-docker-compose
