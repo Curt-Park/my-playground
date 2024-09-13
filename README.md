@@ -36,7 +36,12 @@ make down
     - chromadb
 - n8n.yaml
     - n8n: http://hostname/n8n/
-      - requires $N8N_HOST environment variable 
+      - n8n requires the following environment variables:
+          - N8N_HOST
+          - N8N_SMTP_HOST
+          - N8N_SMTP_PORT
+          - N8N_SMTP_USER
+          - N8N_SMTP_PASS  # generate app password for gmail
     - postgres
 
 ## References
