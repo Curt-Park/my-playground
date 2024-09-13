@@ -28,18 +28,17 @@ services:
     image: docker.n8n.io/n8nio/n8n:1.58.1
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
-      - "traefik.http.routers.n8n.service=n8n"
       - "traefik.http.routers.n8n.rule=PathPrefix(`/n8n`)"
-      - "traefik.http.routers.n8n.middlewares=n8n-pathstrip@docker"
-      - "traefik.http.middlewares.n8n-pathstrip.stripprefix.prefixes=/n8n"
-      - "traefik.http.middlewares.n8n-pathstrip.stripprefix.forceslash=false"
+      # Use redirection for workflow test
+      - "traefik.http.routers.n8n.middlewares=n8n-redirect-to-port"
+      - "traefik.http.middlewares.n8n-redirect-to-port.redirectregex.regex=^http://(.*)/n8n/(.*)"
+      - "traefik.http.middlewares.n8n-redirect-to-port.redirectregex.replacement=http://$${1}:5678/$${2}"
     ports:
       - "5678:5678"
     environment:
       # N8n deployment
       N8N_PORT: 5678
-      N8N_PATH: /n8n/
+      N8N_PATH: /
       N8N_HOST: ${N8N_HOST}
       N8N_SECURE_COOKIE: false
       # DB
