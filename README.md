@@ -36,6 +36,7 @@ make down
     - chromadb
 - n8n.yaml
     - n8n: http://hostname/n8n/
+      - requires $N8N_HOST environment variable 
     - postgres
 
 ## References
