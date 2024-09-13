@@ -42,7 +42,6 @@ make down
           - N8N_SMTP_PORT
           - N8N_SMTP_USER
           - N8N_SMTP_PASS  # generate app password for gmail
-          - N8N_SMTP_SENDER
     - postgres
 
 ## References
