@@ -39,8 +39,12 @@ services:
       # N8n deployment
       N8N_PORT: 5678
       N8N_PATH: /
-      N8N_HOST: ${N8N_HOST}
       N8N_SECURE_COOKIE: false
+      N8N_HOST: ${N8N_HOST}
+      N8N_SMTP_HOST: ${N8N_SMTP_HOST}
+      N8N_SMTP_PORT: ${N8N_SMTP_PORT}
+      N8N_SMTP_USER: ${N8N_SMTP_USER}
+      N8N_SMTP_PASS: ${N8N_SMTP_PASS}
       # DB
       DB_POSTGRESDB_HOST: postgres
       DB_POSTGRESDB_PORT: 5432
