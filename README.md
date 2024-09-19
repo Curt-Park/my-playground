@@ -44,6 +44,24 @@ make down
           - N8N_SMTP_PASS  # generate app password for gmail
     - postgres
 
+## n8n on Fly.io
+- Install [flyctl](https://fly.io/docs/flyctl/install/)
+
+Set secrets.
+```bash
+fly secrets --config n8n-fly.toml set N8N_SMTP_PASS='...'
+fly secrets --config n8n-fly.toml set N8N_SMTP_HOST='...'
+fly secrets --config n8n-fly.toml set N8N_SMTP_PORT='...'
+fly secrets --config n8n-fly.toml set N8N_SMTP_USER='...'
+```
+
+Launch or deploy the app.
+```bash
+fly launch --config n8n-fly.toml
+# or
+fly deploy --config n8n-fly.toml
+```
+
 ## References
 - https://github.com/hongshibao/gpu-monitoring-docker-compose
 - https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#serve_from_sub_path
