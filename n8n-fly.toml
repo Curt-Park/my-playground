@@ -1,0 +1,42 @@
+# fly.toml app configuration file generated for curt-n8n on 2024-09-19T10:57:41+09:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'curt-n8n'
+primary_region = 'sin'
+
+[experimental]
+  auto_rollback = true
+
+[build]
+  image = 'docker.n8n.io/n8nio/n8n:latest'
+
+[env]
+  GENERIC_TIMEZONE = 'Asia/Seoul'
+  N8N_HOST = 'curt-n8n.fly.dev'
+  N8N_PORT = '5678'
+  TINI_SUBREAPER = 'true'
+  TZ = 'Asia/Seoul'
+  WEBHOOK_URL = 'https://curt-n8n.fly.dev'
+  N8N_SMTP_HOST = ${N8N_SMTP_HOST}
+  N8N_SMTP_PORT = ${N8N_SMTP_PORT}
+  N8N_SMTP_USER = ${N8N_SMTP_USER}
+  N8N_SMTP_PASS = ${N8N_SMTP_PASS}
+
+[[mounts]]
+  source = 'curt_n8n_vol'
+  destination = '/home/node/.n8n'
+
+[http_service]
+  internal_port = 5678
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
