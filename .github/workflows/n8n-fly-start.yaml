@@ -1,0 +1,17 @@
+name: n8n Fly start
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 11 * * *'  # 08:30 AM KST
+
+jobs:
+  n8n-start:
+    name: start-n8n
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl m start --config n8n-fly.toml
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

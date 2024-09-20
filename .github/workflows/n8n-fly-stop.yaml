@@ -1,0 +1,17 @@
+name: n8n Fly stop
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'  # 9 PM KST
+
+jobs:
+  n8n-stop:
+    name: stop-n8n
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl m stop --config n8n-fly.toml
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
