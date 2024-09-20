@@ -3,7 +3,8 @@ name: n8n Fly stop
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 12 * * *'  # 9 PM KST
+    - cron: '0 12 * * *'  # 09 PM KST
+    - cron: '0 18 * * *'  # 03 AM KST
 
 jobs:
   n8n-stop:
