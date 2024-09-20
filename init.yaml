@@ -13,9 +13,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-      - "traefik.http.routers.portainer.rule=PathPrefix(`/portainer`)"
-      - "traefik.http.routers.portainer.middlewares=portainer-pathstrip@docker"
-      - "traefik.http.middlewares.portainer-pathstrip.stripprefix.prefixes=/portainer"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.only-for-me.app`)"
+      - "traefik.http.routers.portainer.service=portainer"
     image: portainer/portainer-ce:latest
     container_name: portainer
     ports:
