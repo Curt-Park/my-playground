@@ -29,7 +29,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # check ./config/traefik.yaml
-      - ${HOME}/certs:/tools/certs:ro
+      - /usr/local/certs:/tools/certs:ro
       - ./config/traefik.yaml:/etc/traefik/dynamic/config.yaml:ro
     networks:
       - ingress
