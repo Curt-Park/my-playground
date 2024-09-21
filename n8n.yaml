@@ -25,6 +25,7 @@ services:
       N8N_SMTP_PORT: ${N8N_SMTP_PORT}
       N8N_SMTP_USER: ${EMAIL}
       N8N_SMTP_PASS: ${N8N_SMTP_PASS}
+      WEBHOOK_URL: https://n8n.${DOMAIN}/
       # General
       GENERIC_TIMEZONE: ${TIMEZONE}
       TZ: ${TIMEZONE}
