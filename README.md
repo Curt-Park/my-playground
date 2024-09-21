@@ -15,7 +15,7 @@ COMPOSE_PROJECT_NAME=$SERVICE_NAME make serive-down # requires .env
 5. Deploy
 
 ## Service Stacks
-- `network.yaml`: this requires ssl/tls certs in `./certs/cloudflare`
+- `network.yaml`
     - traefik
     - cloudflare-companion
 - `database.yaml`

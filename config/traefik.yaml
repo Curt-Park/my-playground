@@ -1,4 +1,0 @@
-tls:
-  certificates:
-    - certFile: /tools/certs/cloudflare/only-for-me.app.pem
-      keyFile: /tools/certs/cloudflare/only-for-me.app.key
