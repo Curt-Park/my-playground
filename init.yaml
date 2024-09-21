@@ -1,5 +1,3 @@
-version: "3"
-
 networks:
   ingress:
     name: ingress
@@ -11,10 +9,11 @@ volumes:
 services:
   portainer:
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.only-for-me.app`)"
-      - "traefik.http.routers.portainer.service=portainer"
+      - traefik.enable=true
+      - traefik.http.routers.portainer.tls=true
+      - traefik.http.routers.portainer.service=portainer
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)
     image: portainer/portainer-ce:latest
     container_name: portainer
     ports:

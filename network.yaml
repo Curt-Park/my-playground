@@ -1,5 +1,3 @@
-version: "3"
-
 networks:
   ingress:
     name: ingress
@@ -10,20 +8,41 @@ services:
     image: traefik:v3.1.2
     container_name: traefik
     command:
-      # Enable Docker in Traefik, so that it reads labels from Docker services
-      - "--providers.docker=true"
-      # Traefik will listen to incoming request on the port 80/443 (http/https)
-      - "--entryPoints.web.address=:80"
-      - "--entryPoints.websecure.address=:443"
+      - --providers.docker=true
+      - --entryPoints.web.address=:80
+      - --entryPoints.websecure.address=:443
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik-dashboard.tls=true
+      - traefik.http.routers.traefik-dashboard.service=traefik-dashboard
+      - traefik.http.routers.traefik-dashboard.rule=Host(`traefik.${DOMAIN}`)
+      - traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080
     ports:
       # The HTTP port
       - 80:80
       # The HTTPS port
       - 443:443
-      # The traefik dashboard port (enabled by --api.insecure=true)
+      # The traefik dashboard port
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - ingress
+    restart: always
+
+  cloudflare-companion:
+    image: tiredofit/traefik-cloudflare-companion
+    container_name: cloudflare-companion
+    environment:
+      - CF_EMAIL=${EMAIL}
+      - CF_TOKEN=${CF_TOKEN}
+      - TARGET_DOMAIN=${DOMAIN}
+      - DOMAIN1=${DOMAIN}
+      - DOMAIN1_PROXIED=true
+      - DOMAIN1_ZONE_ID=${DOMAIN_ZONE_ID}
+      - TIMEZONE=${TIMEZONE}
+    networks:
+      - ingress
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: always
