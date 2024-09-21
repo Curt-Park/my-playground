@@ -24,6 +24,7 @@ services:
     ports:
       - 3000:3000
     environment:
+      LOG_LEVEL: verbose
       DATABASE_TYPE: postgres
       DATABASE_PORT: 5432
       DATABASE_HOST: postgres
