@@ -24,6 +24,7 @@ services:
     ports:
       - 3000:3000
     environment:
+      DEBUG: true
       LOG_LEVEL: debug
       DATABASE_TYPE: postgres
       DATABASE_PORT: 5432
