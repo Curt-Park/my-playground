@@ -11,6 +11,7 @@ volumes:
 services:
   n8n:
     image: docker.n8n.io/n8nio/n8n:1.59.4
+    container_name: n8n
     labels:
       - traefik.enable=true
       - traefik.http.routers.n8n.tls=true
