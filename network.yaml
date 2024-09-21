@@ -12,6 +12,7 @@ services:
       - --providers.docker=true
       - --entryPoints.web.address=:80
       - --entryPoints.websecure.address=:443
+      - --providers.file.directory=/etc/traefik/dynamic
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik-dashboard.tls=true
@@ -27,6 +28,9 @@ services:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      # check ./config/traefik.yaml
+      - ${HOME}/certs:/tools/certs:ro
+      - ./config/traefik.yaml:/etc/traefik/dynamic/config.yaml:ro
     networks:
       - ingress
     restart: always
