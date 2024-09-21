@@ -42,12 +42,11 @@ services:
       # Read more about deployments: https://docs.trychroma.com/deployment
       - chromadb:/chroma/chroma
     networks:
-      - ingress
       - database
     restart: always
 
   vectoradmin:
-    image: mintplexlabs/vectoradmin
+    image: mintplexlabs/vectoradmin:latest
     container_name: vectoradmin
     labels:
       - traefik.enable=true
@@ -69,5 +68,5 @@ services:
       - ingress
       - database
     depends_on:
-      - database
+      - postgres
     restart: always
