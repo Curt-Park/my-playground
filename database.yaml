@@ -1,0 +1,73 @@
+networks:
+  database: {}
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  postgres: {}
+  chromadb: {}
+  vectoradmin-storage: {}
+  vectoradmin-hotdir: {}
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_MULTIPLE_DATABASES: ${POSTGRES_MULTIPLE_DATABASES}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - database
+    restart: always
+
+  chromadb:
+    image: chromadb/chroma:0.5.3
+    container_name: chromadb
+    environment:
+      IS_PERSISTENT: TRUE
+    command: "--workers 1 --host 0.0.0.0 --port 8000 --proxy-headers --log-config chromadb/log_config.yml --timeout-keep-alive 30"
+    healthcheck:
+      # Adjust below to match your container port
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      # Be aware that indexed data are located in "/chroma/chroma/"
+      # Default configuration for persist_directory in chromadb/config.py
+      # Read more about deployments: https://docs.trychroma.com/deployment
+      - chromadb:/chroma/chroma
+    networks:
+      - ingress
+      - database
+    restart: always
+
+  vectoradmin:
+    image: mintplexlabs/vectoradmin
+    container_name: vectoradmin
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.vectoradmin.tls=true
+      - traefik.http.routers.vectoradmin.service=vectoradmin
+      - traefik.http.services.vectoradmin.loadbalancer.server.port=3001
+      - traefik.http.routers.vectoradmin.rule=Host(`vectoradmin.${DOMAIN}`)
+    environment:
+      SERVER_PORT: 3001
+      JWT_SECRET: "your-random-string-here"
+      INNGEST_EVENT_KEY: "background_workers"
+      INNGEST_SIGNING_KEY: "random-string-goes-here"
+      INNGEST_LANDING_PAGE: "true"
+      DATABASE_CONNECTION_STRING: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/vdbms"
+    volumes:
+      - vectoradmin-storage:/app/backend/storage
+      - vectoradmin-hotdir:/app/document-processor/hotdir
+    networks:
+      - ingress
+      - database
+    depends_on:
+      - database
+    restart: always

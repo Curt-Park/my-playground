@@ -1,60 +1,24 @@
-version: "3"
-
 networks:
   flowise: {}
+  database:
+    name: database
+    external: true
   ingress:
     name: ingress
     external: true
 
 volumes:
-  ollama: {}
-  postgres: {}
   flowise: {}
-  chromadb: {}
-  vectoradmin-storage: {}
-  vectoradmin-hotdir: {}
 
 services:
-  ollama:
-    # required:
-    #   curl http://localhost:11434/api/pull -d '{ "name": "llama3.1" }'
-    image: ollama/ollama:0.3.9
-    volumes:
-      - ollama:/root/.ollama
-    environment:
-      - OLLAMA_KEEP_ALIVE=24h
-      - OLLAMA_HOST=0.0.0.0
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-    networks:
-      - flowise
-    restart: always
-
-  postgres:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: flowise
-      POSTGRES_PASSWORD: flowise
-      POSTGRES_DB: flowise
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    networks:
-      - flowise
-    restart: always
-
   flowise:
-    image: flowiseai/flowise:2.0.7
+    image: flowiseai/flowise:2.1.1
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.flowise.rule=PathPrefix(`/flowise`)"
-      - "traefik.http.routers.flowise.middlewares=flowise-redirect-to-port"
-      - "traefik.http.middlewares.flowise-redirect-to-port.redirectregex.regex=^http://(.*)/flowise/(.*)"
-      - "traefik.http.middlewares.flowise-redirect-to-port.redirectregex.replacement=http://$${1}:3000/$${2}"
+      - traefik.enable=true
+      - traefik.http.routers.flowise.tls=true
+      - traefik.http.routers.flowise.service=flowise
+      - traefik.http.services.flowise.loadbalancer.server.port=3000
+      - traefik.http.routers.flowise.rule=Host(`flowise.${DOMAIN}`)
     ports:
       - 3000:3000
     environment:
@@ -62,60 +26,12 @@ services:
       DATABASE_PORT: 5432
       DATABASE_HOST: postgres
       DATABASE_NAME: flowise
-      DATABASE_USER: flowise
-      DATABASE_PASSWORD: flowise
+      DATABASE_USER: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - flowise:/root/.flowise
     networks:
       - flowise
       - ingress
-    depends_on:
-      - postgres
-    restart: always
-
-  chromadb:
-    image: chromadb/chroma:0.5.3
-    volumes:
-      # Be aware that indexed data are located in "/chroma/chroma/"
-      # Default configuration for persist_directory in chromadb/config.py
-      # Read more about deployments: https://docs.trychroma.com/deployment
-      - chromadb:/chroma/chroma
-    environment:
-      IS_PERSISTENT: TRUE
-    command: "--workers 1 --host 0.0.0.0 --port 8000 --proxy-headers --log-config chromadb/log_config.yml --timeout-keep-alive 30"
-    healthcheck:
-      # Adjust below to match your container port
-      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    networks:
-      - flowise
-    restart: always
-
-  vector-admin:
-    image: mintplexlabs/vectoradmin
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vectoradmin.rule=PathPrefix(`/vectoradmin`)"
-      - "traefik.http.routers.vectoradmin.middlewares=vectoradmin-redirect-to-port"
-      - "traefik.http.middlewares.vectoradmin-redirect-to-port.redirectregex.regex=^http://(.*)/vectoradmin/(.*)"
-      - "traefik.http.middlewares.vectoradmin-redirect-to-port.redirectregex.replacement=http://$${1}:3001/$${2}"
-    ports:
-      - 3001:3001
-    environment:
-      SERVER_PORT: 3001
-      JWT_SECRET: "your-random-string-here"
-      INNGEST_EVENT_KEY: "background_workers"
-      INNGEST_SIGNING_KEY: "random-string-goes-here"
-      INNGEST_LANDING_PAGE: "true"
-      DATABASE_CONNECTION_STRING: "postgresql://flowise:flowise@postgres:5432/vdbms"
-    volumes:
-      - vectoradmin-storage:/app/backend/storage
-      - vectoradmin-hotdir:/app/document-processor/hotdir
-    networks:
-      - flowise
-      - ingress
-    depends_on:
-      - postgres
+      - database
     restart: always
