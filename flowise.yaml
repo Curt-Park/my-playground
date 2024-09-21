@@ -16,8 +16,8 @@ services:
     container_name: flowise
     labels:
       - traefik.enable=true
-      - traefik.http.routers.flowise.tls.certresolver=myresolver
       - traefik.http.routers.flowise.rule=Host(`flowise.${DOMAIN}`)
+      - traefik.http.routers.flowise.tls.certresolver=myresolver
       - traefik.http.routers.flowise.service=flowise
       - traefik.http.services.flowise.loadbalancer.server.port=3000
     ports:

@@ -50,10 +50,10 @@ services:
     container_name: vectoradmin
     labels:
       - traefik.enable=true
-      - traefik.http.routers.vectoradmin.tls=true
+      - traefik.http.routers.vectoradmin.rule=Host(`vectoradmin.${DOMAIN}`)
+      - traefik.http.routers.flowise.tls.certresolver=myresolver
       - traefik.http.routers.vectoradmin.service=vectoradmin
       - traefik.http.services.vectoradmin.loadbalancer.server.port=3001
-      - traefik.http.routers.vectoradmin.rule=Host(`vectoradmin.${DOMAIN}`)
     environment:
       SERVER_PORT: 3001
       JWT_SECRET: "your-random-string-here"
