@@ -3,6 +3,12 @@ networks:
     name: ingress
     external: true
 
+volumes:
+  configs:
+    external: true
+  certs:
+    external: true
+
 services:
   traefik:
     image: traefik:v3.1.2
@@ -12,7 +18,7 @@ services:
       - --providers.docker=true
       - --entryPoints.web.address=:80
       - --entryPoints.websecure.address=:443
-      - --providers.file.directory=/etc/traefik/dynamic
+      - --providers.file.filename=/configs/traefik.yaml
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik-dashboard.tls=true
@@ -29,8 +35,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # check ./config/traefik.yaml
-      - /usr/local/certs:/tools/certs:ro
-      - ./config/traefik.yaml:/etc/traefik/dynamic/config.yaml:ro
+      - certs:/tools/certs:ro
+      - configs:/configs:ro
     networks:
       - ingress
     restart: always

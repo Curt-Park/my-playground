@@ -4,6 +4,10 @@ networks:
     external: true
 
 volumes:
+  configs:
+    external: true
+  certs:
+    external: true
   portainer_data:
 
 services:
@@ -19,6 +23,8 @@ services:
     ports:
       - 9000:9000
     volumes:
+      - certs:/certs
+      - configs:/configs
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
