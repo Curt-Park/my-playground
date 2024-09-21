@@ -13,6 +13,7 @@ volumes:
 services:
   flowise:
     image: flowiseai/flowise:2.1.1
+    container_name: flowise
     labels:
       - traefik.enable=true
       - traefik.http.routers.flowise.tls=true
