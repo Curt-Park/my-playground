@@ -4,27 +4,21 @@ networks:
     external: true
 
 volumes:
-  configs:
-    external: true
-  certs:
-    external: true
   portainer_data:
 
 services:
   portainer:
     labels:
       - traefik.enable=true
-      - traefik.http.routers.portainer.tls=true
-      - traefik.http.routers.portainer.service=portainer
-      - traefik.http.services.portainer.loadbalancer.server.port=9000
       - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.tls.certresolver=myresolver
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
     image: portainer/portainer-ce:latest
     container_name: portainer
     ports:
       - 9000:9000
     volumes:
-      - certs:/certs
-      - configs:/configs
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
