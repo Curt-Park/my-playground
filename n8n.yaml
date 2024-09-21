@@ -20,7 +20,6 @@ services:
       - traefik.http.routers.n8n.rule=Host(`n8n.${DOMAIN}`)
     environment:
       # N8n deployment
-      N8N_PORT: 5678
       N8N_HOST: n8n.${DOMAIN}
       N8N_SMTP_HOST: ${N8N_SMTP_HOST}
       N8N_SMTP_PORT: ${N8N_SMTP_PORT}
