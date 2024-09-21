@@ -4,10 +4,7 @@ networks:
     external: true
 
 volumes:
-  configs:
-    external: true
-  certs:
-    external: true
+  traefik: {}
 
 services:
   traefik:
@@ -18,7 +15,9 @@ services:
       - --providers.docker=true
       - --entryPoints.web.address=:80
       - --entryPoints.websecure.address=:443
-      - --providers.file.filename=/configs/traefik.yaml
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      - --certificatesresolvers.myresolver.acme.email=${EMAIL}
+      - --certificatesresolvers.myresolver.acme.storage=/traefik_vol/acme.json
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik-dashboard.tls=true
@@ -34,9 +33,7 @@ services:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      # check ./config/traefik.yaml
-      - certs:/tools/certs:ro
-      - configs:/configs:ro
+      - traefik:/traefik_vol
     networks:
       - ingress
     restart: always
