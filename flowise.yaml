@@ -20,6 +20,8 @@ services:
       - traefik.http.routers.flowise.service=flowise
       - traefik.http.services.flowise.loadbalancer.server.port=3000
       - traefik.http.routers.flowise.rule=Host(`flowise.${DOMAIN}`)
+    ports:
+      - 3000:3000
     environment:
       DATABASE_TYPE: postgres
       DATABASE_PORT: 5432
