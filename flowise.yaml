@@ -44,8 +44,6 @@ services:
   flowise:
     image: flowiseai/flowise:2.1.1
     container_name: flowise
-    ports:
-      - 3000:3000
     environment:
       DEBUG: true
       LOG_LEVEL: debug
