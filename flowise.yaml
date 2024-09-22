@@ -18,7 +18,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.flowise-proxy.entrypoints=websecure
       - traefik.http.routers.flowise-proxy.rule=Host(`flowise.${DOMAIN}`)
-      - traefik.http.services.flowise-proxy.loadbalancer.server.port=3000
+      - traefik.http.services.flowise-proxy.loadbalancer.server.port=8888
     entrypoint: /bin/sh
     # command: -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf && exec /usr/bin/tinyproxy -d"
     command: >
