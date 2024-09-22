@@ -99,6 +99,4 @@ services:
       - DOMAINS=${DOMAIN}
         # Tell Cloudflare to cache webpages and hide your IP (optional)
       - PROXIED=true
-    networks:
-      - ingress
     restart: always
