@@ -32,7 +32,7 @@ services:
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
       PORT: 3000
       FLOWISE_USERNAME: ${EMAIL}
-      FLOWISE_PASSWORD: ${FLOWISE_PASSWORD}
+      FLOWISE_PASSWORD: ${PASSWORD}
       SHOW_COMMUNITY_NODES: true
     volumes:
       - flowise:/root/.flowise
