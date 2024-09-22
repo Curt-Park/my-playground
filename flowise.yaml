@@ -24,8 +24,6 @@ services:
     command: >
       -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf &&
       tinyproxy -d -c /etc/tinyproxy/tinyproxy.conf"
-    ports:
-      - 3000:8888
     # See tinyproxy.conf for better explanation of these values.
     # https://tinyproxy.github.io/
     environment:

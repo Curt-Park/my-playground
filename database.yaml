@@ -45,11 +45,35 @@ services:
       - database
     restart: always
 
+  vectoradmin-proxy:
+    image: docker.io/kalaksi/tinyproxy:latest
+    container_name: vectoradmin-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.vectoradmin-proxy.entrypoints=websecure
+      - traefik.http.routers.vectoradmin-proxy.rule=Host(`vectoradmin.${DOMAIN}`)
+      - traefik.http.services.vectoradmin-proxy.loadbalancer.server.port=8888
+    entrypoint: /bin/sh
+    # command: -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf && exec /usr/bin/tinyproxy -d"
+    command: >
+      -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf &&
+      tinyproxy -d -c /etc/tinyproxy/tinyproxy.conf"
+    # See tinyproxy.conf for better explanation of these values.
+    # https://tinyproxy.github.io/
+    environment:
+      CONFIG: |
+        Port 8888
+        LogLevel Info
+        Timeout 600
+        ReversePath "/" "http://vectoradmin:3001/"
+    networks:
+      - ingress
+      - database
+    restart: always
+
   vectoradmin:
     image: mintplexlabs/vectoradmin:latest
     container_name: vectoradmin
-    ports:
-      - 3001:3001
     environment:
       SERVER_PORT: 3001
       JWT_SECRET: "your-random-string-here"
@@ -61,7 +85,6 @@ services:
       - vectoradmin-storage:/app/backend/storage
       - vectoradmin-hotdir:/app/document-processor/hotdir
     networks:
-      - ingress
       - database
     depends_on:
       - postgres
