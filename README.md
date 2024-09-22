@@ -23,7 +23,7 @@ COMPOSE_PROJECT_NAME=$SERVICE_NAME make serive-down # requires .env
     - postgresql
     - chromadb
     - vectoradmin
-- `n8n.yaml` (requires `database`)
+- `n8n.yaml`
     - n8n
 - `flowise.yaml` (requres `database`)
     - flowise
