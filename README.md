@@ -18,6 +18,7 @@ COMPOSE_PROJECT_NAME=$SERVICE_NAME make serive-down # requires .env
 - `network.yaml`
     - traefik
     - cloudflare-companion
+    - cloudflare-ddns
 - `database.yaml`
     - postgresql
     - chromadb
