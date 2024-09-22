@@ -48,11 +48,6 @@ services:
   vectoradmin:
     image: mintplexlabs/vectoradmin:latest
     container_name: vectoradmin
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.vectoradmin.entrypoints=websecure
-      - traefik.http.routers.vectoradmin.rule=Host(`vectoradmin.${DOMAIN}`)
-      - traefik.http.services.vectoradmin.loadbalancer.server.port=3001
     ports:
       - 3001:3001
     environment:
