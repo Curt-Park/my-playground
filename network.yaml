@@ -15,10 +15,13 @@ services:
       - --providers.docker=true
       - --api.insecure=true
       - --api.dashboard=true
+      - --accesslog=true
 
       # Configure entrypoint
       - --entryPoints.web.address=:80
       - --entryPoints.websecure.address=:443
+      - --entryPoints.web.http.redirections.entryPoint.to=websecure
+      - --entryPoints.web.http.redirections.entryPoint.scheme=https
 
       # Set up LetsEncrypt
       - --certificatesresolvers.myresolver.acme.tlschallenge=true
