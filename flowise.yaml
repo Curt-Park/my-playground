@@ -22,7 +22,7 @@ services:
 #      - traefik.http.services.flowise.loadbalancer.server.port=3000
       - traefik.http.routers.flowise.middlewares=flowise-redirect-to-port
       - traefik.http.middlewares.flowise-redirect-to-port.redirectregex.regex=^https://flowise.${DOMAIN}/(.*)
-      - traefik.http.middlewares.flowise-redirect-to-port.redirectregex.replacement=http://172.30.1.75:3000/$${1}"
+      - traefik.http.middlewares.flowise-redirect-to-port.redirectregex.replacement=http://172.30.1.75:3000/$${1}
     ports:
       - 3000:3000
     environment:
