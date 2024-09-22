@@ -22,8 +22,7 @@ services:
     entrypoint: /bin/sh
     # command: -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf && exec /usr/bin/tinyproxy -d"
     command: >
-      -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy_tmp.conf &&
-      cp /etc/tinyproxy/tinyproxy.default.conf /etc/tinyproxy/tinyproxy.conf &&
+      -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf
       exec /usr/bin/tinyproxy -d"
     ports:
       - 3000:8888
@@ -31,10 +30,10 @@ services:
     # https://tinyproxy.github.io/
     environment:
       CONFIG: |
-        Port: 8888
-        LogLevel: Info
-        Timeout: 600
-        ReversePath: "/" "http://flowise:3000/"
+        Port 8888
+        LogLevel Info
+        Timeout 600
+        ReversePath "/" "http://flowise:3000/"
     healthcheck:
       test: ["CMD", "curl", "-I", "-H", "Host: tinyproxy.stats", "http://localhost:8888"]
       interval: 5m
