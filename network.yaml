@@ -46,8 +46,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
-      - traefik.http.routers.traefik.middlewares=auth
-      - "traefik.http.middlewares.auth.basicauth.users=${EMAIL}:${PASSWORD_SHA1}"
       - traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080
     ports:
       # The HTTP port
