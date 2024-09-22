@@ -48,13 +48,14 @@ services:
   vectoradmin-proxy:
     image: docker.io/kalaksi/tinyproxy:latest
     container_name: vectoradmin-proxy
+    ports:
+      - 3001:8888
     labels:
       - traefik.enable=true
       - traefik.http.routers.vectoradmin-proxy.entrypoints=websecure
       - traefik.http.routers.vectoradmin-proxy.rule=Host(`vectoradmin.${DOMAIN}`)
       - traefik.http.services.vectoradmin-proxy.loadbalancer.server.port=8888
     entrypoint: /bin/sh
-    # command: -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf && exec /usr/bin/tinyproxy -d"
     command: >
       -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf &&
       tinyproxy -d -c /etc/tinyproxy/tinyproxy.conf"
