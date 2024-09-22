@@ -16,6 +16,7 @@ services:
     container_name: flowise-proxy
     labels:
       - traefik.enable=true
+      - traefik.http.routers.flowise-proxy.tls=true
       - traefik.http.routers.flowise-proxy.entrypoints=websecure
       - traefik.http.routers.flowise-proxy.tls.certresolver=myresolver
       - traefik.http.routers.flowise-proxy.rule=Host(`flowise.${DOMAIN}`)

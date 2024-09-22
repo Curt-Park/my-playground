@@ -50,6 +50,7 @@ services:
     container_name: vectoradmin-proxy
     labels:
       - traefik.enable=true
+      - traefik.http.routers.vectoradmin-proxy.tls=true
       - traefik.http.routers.vectoradmin-proxy.entrypoints=websecure
       - traefik.http.routers.vectoradmin-proxy.tls.certresolver=myresolver
       - traefik.http.routers.vectoradmin-proxy.rule=Host(`vectoradmin.${DOMAIN}`)
