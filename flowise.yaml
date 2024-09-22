@@ -11,6 +11,36 @@ volumes:
   flowise: {}
 
 services:
+  tinyproxy:
+    image: docker.io/kalaksi/tinyproxy:latest
+    container_name: flowise-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.flowise-proxy.entrypoints=websecure
+      - traefik.http.routers.flowise-proxy.rule=Host(`flowise.${DOMAIN}`)
+      - traefik.http.services.flowise-proxy.loadbalancer.server.port=3000
+    entrypoint: /bin/sh
+    command: -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf && exec /usr/bin/tinyproxy -d"
+    ports:
+      - 3000:8888
+    # See tinyproxy.conf for better explanation of these values.
+    # https://tinyproxy.github.io/
+    environment:
+      CONFIG: |
+        Port: 8888
+        LogLevel: Info
+        Timeout: 600
+        ReversePath: "/" "http://flowise:3000/"
+    healthcheck:
+      test: ["CMD", "curl", "-I", "-H", "Host: tinyproxy.stats", "http://localhost:8888"]
+      interval: 5m
+      timeout: 10s
+      retries: 1
+    networks:
+      - flowise
+      - ingress
+    restart: always
+
   flowise:
     image: flowiseai/flowise:2.1.1
     container_name: flowise
