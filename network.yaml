@@ -41,9 +41,9 @@ services:
       - CF_DNS_API_TOKEN=${CF_TOKEN}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik-dashboard.tls=true
-      - traefik.http.routers.traefik-dashboard.service=traefik-dashboard
+      - traefik.http.routers.traefik-dashboard.entrypoints=websecure
       - traefik.http.routers.traefik-dashboard.rule=Host(`traefik.${DOMAIN}`)
+      - traefik.http.routers.traefik-dashboard.tls.certresolver=myresolver
       - traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080
     ports:
       # The HTTP port
