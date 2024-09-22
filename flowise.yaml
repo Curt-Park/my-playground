@@ -34,11 +34,6 @@ services:
         LogLevel Info
         Timeout 600
         ReversePath "/" "http://flowise:3000/"
-    healthcheck:
-      test: ["CMD", "curl", "-I", "-H", "Host: tinyproxy.stats", "http://localhost:8888"]
-      interval: 5m
-      timeout: 10s
-      retries: 1
     networks:
       - flowise
       - ingress
