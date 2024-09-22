@@ -75,3 +75,30 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
+
+  cloudflare-ddns:
+    # Choose the appropriate tag based on your need:
+    # - "latest" for the latest stable version (which could become 2.x.y
+    #   in the future and break things)
+    # - "1" for the latest stable version whose major version is 1
+    # - "1.x.y" to pin the specific version 1.x.y
+    image: favonia/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    # This bypasses network isolation and makes IPv6 easier (optional; see below)
+    network_mode: host
+    # Make the container filesystem read-only (optional but recommended)
+    read_only: true
+    # Drop all Linux capabilities (optional but recommended)
+    cap_drop: [all]
+    # Another protection to restrict superuser privileges (optional but recommended)
+    security_opt: [no-new-privileges:true]
+    environment:
+        # Your Cloudflare API token
+      - CF_API_TOKEN=${CF_TOKEN}
+        # Your domains (separated by commas)
+      - DOMAINS=${DOMAIN}
+        # Tell Cloudflare to cache webpages and hide your IP (optional)
+      - PROXIED=true
+    networks:
+      - ingress
+    restart: always
