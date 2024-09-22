@@ -21,7 +21,7 @@ services:
       - traefik.http.services.flowise-proxy.loadbalancer.server.port=3000
     entrypoint: /bin/sh
     # command: -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf && exec /usr/bin/tinyproxy -d"
-    command: ^
+    command: >
       -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy_tmp.conf &&
       cp /etc/tinyproxy/tinyproxy.default.conf /etc/tinyproxy/tinyproxy.conf &&
       exec /usr/bin/tinyproxy -d"
