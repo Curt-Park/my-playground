@@ -42,11 +42,6 @@ services:
     environment:
       - CF_API_EMAIL=${EMAIL}
       - CF_DNS_API_TOKEN=${CF_TOKEN}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
-      - traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080
     ports:
       # The HTTP port
       - 80:80
