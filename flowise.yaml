@@ -11,7 +11,7 @@ volumes:
   flowise: {}
 
 services:
-  tinyproxy:
+  flowise-proxy:
     image: docker.io/kalaksi/tinyproxy:latest
     container_name: flowise-proxy
     labels:
@@ -22,8 +22,8 @@ services:
     entrypoint: /bin/sh
     # command: -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf && exec /usr/bin/tinyproxy -d"
     command: >
-      -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf
-      exec /usr/bin/tinyproxy -d"
+      -c "echo \"$$CONFIG\" > /etc/tinyproxy/tinyproxy.conf &&
+      tinyproxy -d -c /etc/tinyproxy/tinyproxy.conf"
     ports:
       - 3000:8888
     # See tinyproxy.conf for better explanation of these values.
