@@ -15,15 +15,11 @@ COMPOSE_PROJECT_NAME=$SERVICE_NAME make serive-down # requires .env
 5. Deploy
 
 ## Service Stacks
+- `init.yaml`
+    - portainer
 - `network.yaml`
     - traefik
     - cloudflare-companion
     - cloudflare-ddns
-- `database.yaml`
-    - postgresql
-    - chromadb
-    - vectoradmin
 - `n8n.yaml`
     - n8n
-- `flowise.yaml` (requres `database`)
-    - flowise
