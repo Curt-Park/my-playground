@@ -23,3 +23,6 @@ COMPOSE_PROJECT_NAME=$SERVICE_NAME make serive-down # requires .env
     - cloudflare-ddns
 - `n8n.yaml`
     - n8n
+- `nocodb.yaml`
+    - nocodb
+    - nocodb-db (postgresql)
