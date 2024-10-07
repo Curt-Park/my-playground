@@ -1,4 +1,5 @@
 # https://docs.n8n.io/hosting/installation/server-setups/docker-compose
+---
 networks:
   n8n: {}
   ingress:
