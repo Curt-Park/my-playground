@@ -1,0 +1,50 @@
+---
+networks:
+  nocodb: {}
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  nocodb_data: {}
+  nocodb_db: {}
+
+services:
+  nocodb:
+    image: nocodb/nocodb:latest
+    container_name: nocodb
+    environment:
+      - NC_DB=pg://nocodb-db:5432?u=${NOCODB_DATABASE_USER}&p=${NOCODB_DATABASE_PW}&d=${NOCODB_DATABASE_NAME}
+      - NC_PUBLIC_URL=https://nocodb.${DOMAIN}
+      - NC_DISABLE_TELE=true
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nocodb.entrypoints=websecure
+      - traefik.http.routers.nocodb.rule=Host(`nocodb.${DOMAIN}`)
+      - traefik.http.services.nocodb.loadbalancer.server.port=8080
+    networks:
+      - nocodb
+      - ingress
+    depends_on:
+      - nocodb-db
+    volumes:
+      - nocodb_data:/usr/app/data
+    restart: always
+
+  nocodb-db:
+    image: postgres:12.17-alpine
+    container_name: nocodb-db
+    environment:
+      POSTGRES_DB: ${NOCODB_DATABASE_NAME}
+      POSTGRES_PASSWORD: ${NOCODB_DATABASE_PW}
+      POSTGRES_USER: ${NOCODB_DATABASE_USER}
+    healthcheck:
+      interval: 10s
+      retries: 10
+      test: pg_isready -U ${NOCODB_DATABASE_USER} -d ${NOCODB_DATABASE_NAME}
+      timeout: 2s
+    networks:
+      - nocodb
+    volumes:
+      - nocodb_db:/var/lib/postgresql/data
+    restart: always

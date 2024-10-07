@@ -1,3 +1,4 @@
+---
 networks:
   ingress:
     name: ingress
