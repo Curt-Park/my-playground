@@ -3,6 +3,7 @@ DOMAIN=""
 
 # NETWORK
 EMAIL=""
+## Use the Edit zone DNS template to create a token
 CF_TOKEN=""
 DOMAIN_ZONE_ID=""
 TIMEZONE=""
