@@ -12,7 +12,7 @@ services:
     image: traefik:v3.1.2
     container_name: traefik
     command:
-      - --log.level=INFO
+      - --log.level=DEBUG
       - --providers.docker=true
       - --api.insecure=true
       - --api.dashboard=true
@@ -25,7 +25,7 @@ services:
       - --entryPoints.web.http.redirections.entryPoint.scheme=https
 
       # Set up LetsEncrypt
-      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      # - --certificatesresolvers.myresolver.acme.tlschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.myresolver.acme.email=${EMAIL}
