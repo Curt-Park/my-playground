@@ -20,7 +20,7 @@ services:
       - traefik.http.services.n8n.loadbalancer.server.port=5678
     environment:
       # N8n deployment
-      N8N_HOST: ${DOMAIN}
+      N8N_HOST: n8n.${DOMAIN}
       N8N_PROTOCOL: https
       N8N_SMTP_HOST: ${N8N_SMTP_HOST}
       N8N_SMTP_PORT: ${N8N_SMTP_PORT}
