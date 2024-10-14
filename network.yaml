@@ -12,7 +12,7 @@ services:
     image: traefik:v3.1.2
     container_name: traefik
     command:
-      - --log.level=DEBUG
+      - --log.level=INFO
       - --providers.docker=true
       - --api.insecure=true
       - --api.dashboard=true
