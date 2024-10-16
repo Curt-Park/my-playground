@@ -3,8 +3,8 @@
 make init  # then, open http://hostname:9000/
 make down
 
-COMPOSE_PROJECT_NAME=$SERVICE_NAME make serive-up   # requires .env
-COMPOSE_PROJECT_NAME=$SERVICE_NAME make serive-down # requires .env
+STACK_NAME=$SERVICE_NAME make service-up   # requires .env
+STACK_NAME=$SERVICE_NAME make service-down # requires .env
 ```
 
 ## Adding Stacks
