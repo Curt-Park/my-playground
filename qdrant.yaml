@@ -17,7 +17,6 @@ services:
     environment:
       QDRANT__SERVICE__GRPC_PORT: 6334
       QDRANT__SERVICE__HTTP_PORT: 6333
-      QDRANT__AUTH__API_KEY: "true"
     networks:
       - qdrant
       - ingress
