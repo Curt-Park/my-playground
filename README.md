@@ -26,3 +26,5 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
 - `nocodb.yaml`
     - nocodb
     - nocodb-db (postgresql)
+- `qdrant.yaml`
+    - qdrant
