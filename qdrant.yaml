@@ -1,0 +1,23 @@
+---
+networks:
+  qdrant: {}
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  qdrant_storage: {}
+  
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    environment:
+      QDRANT__SERVICE__GRPC_PORT: 6334
+      QDRANT__SERVICE__HTTP_PORT: 6333
+    networks:
+      - qdrant
+      - ingress
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: always
