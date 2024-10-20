@@ -36,8 +36,6 @@ gateway:
     - faas_nats_port=4222
     - scale_from_zero=true
     - function_namespace=openfaas-fn
-  cap_add:
-    - CAP_NET_RAW
   depends_on:
     - nats
   ports:
@@ -56,8 +54,6 @@ queue-worker:
     - ack_wait=5m5s
     - max_inflight=1
     - write_debug=false
-  cap_add:
-    - CAP_NET_RAW
   depends_on:
     - nats
   networks:
