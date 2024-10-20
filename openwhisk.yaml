@@ -28,8 +28,6 @@ services:
     privileged: true
     pid: "host"
     userns_mode: "host"
-    links:
-      - db:db.docker
     depends_on:
       - db
     environment:
@@ -39,7 +37,7 @@ services:
       CONFIG_whisk_couchdb_provider: CouchDB
       CONFIG_whisk_couchdb_protocol: http
       CONFIG_whisk_couchdb_port: 5984
-      CONFIG_whisk_couchdb_host: db.docker
+      CONFIG_whisk_couchdb_host: db
       CONFIG_whisk_couchdb_username: whisk_admin
       CONFIG_whisk_couchdb_password: some_passw0rd
 
