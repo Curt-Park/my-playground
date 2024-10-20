@@ -1,0 +1,4 @@
+ruff
+fastapi[standard]
+requests-html
+bs4
