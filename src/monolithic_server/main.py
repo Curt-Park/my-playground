@@ -11,12 +11,14 @@ from fastapi import FastAPI, Request
 from fastapi.responses import Response
 from playwright.async_api import async_playwright
 
-logger = logging.getLogger()
+# Logger
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 # API Server
 app = FastAPI(title="N8N API Server")
-logger.debug("fastapi app initialized")
+logger.info("initialized fastapi")
 
 
 # APIs
@@ -65,4 +67,4 @@ if __name__ == "__main__":
     parser.add_argument("--host", type=str, default="0.0.0.0", help="host ip")
     parser.add_argument("--port", type=int, default=9888, help="port number")
     args = parser.parse_args()
-    uvicorn.run(app, host=args.host, port=args.port, access_log=False)
+    uvicorn.run(app, host=args.host, port=args.port)
