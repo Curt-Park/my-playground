@@ -32,8 +32,6 @@ services:
       - db:db.docker
     depends_on:
       - db
-    env_file:
-      - ~/tmp/openwhisk/local.env       # generated during make setup
     environment:
       COMPONENT_NAME: controller
       PORT: 8888
