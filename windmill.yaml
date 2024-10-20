@@ -79,7 +79,7 @@ services:
       - DATABASE_URL=postgres://postgres:changeme@windmill-db/windmill?sslmode=disable
       - MODE=worker
       - WORKER_GROUP=native
-      - NUM_WORKERS=8
+      - NUM_WORKERS=4
       - SLEEP_QUEUE=200
     depends_on:
       - windmill-db
@@ -99,6 +99,7 @@ services:
       - DATABASE_URL=postgres://postgres:changeme@windmill-db/windmill?sslmode=disable
       - MODE=worker
       - WORKER_GROUP=reports
+      - NUM_WORKERS=4
     depends_on:
       - windmill-db
     networks:
