@@ -1,0 +1,16 @@
+---
+networks:
+  monolithic: {}
+  ingress:
+    name: ingress
+    external: true
+
+services:
+  n8n:
+    # port: 9888
+    image: curtpark/monolithic_server:latest
+    container_name: monolithic
+    networks:
+      - monolithic
+      - ingress
+    restart: always

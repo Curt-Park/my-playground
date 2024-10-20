@@ -1,18 +1,15 @@
 """Simple monolithic server for N8N."""
+
 import argparse
-import datetime
-import os
-import time
 import logging
+import time
 from http import HTTPStatus
 from typing import Callable
 
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import Response
-
-from requests_html import HTMLSession
-from bs4 import BeautifulSoup
+from playwright.async_api import async_playwright
 
 logger = logging.getLogger()
 
@@ -32,19 +29,15 @@ def apis(request: Request) -> list[str]:
 
 
 @app.get("/webpage")
-def webscraper(url: str):
-    """"""
-    session = HTMLSession()
-    response = session.get(url)
-
-    response.html.render()
-
-    soup = BeautifulSoup(response.html.html, 'html.parser')
-
-    table = soup.find('table')
-    rows = table.find_all('tr')
-
-    return rows
+async def webscraper(url: str) -> str:
+    """Scrap the given web contents."""
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        await page.goto(url, wait_until="networkidle")
+        content = await page.content()
+        await browser.close()
+    return content
 
 
 # Middlewares
@@ -70,6 +63,6 @@ async def add_process_time_header(request: Request, call_next: Callable[[Request
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default="0.0.0.0", help="host ip")
-    parser.add_argument("--port", type=int, default=9100, help="port number")
+    parser.add_argument("--port", type=int, default=9888, help="port number")
     args = parser.parse_args()
     uvicorn.run(app, host=args.host, port=args.port, access_log=False)
