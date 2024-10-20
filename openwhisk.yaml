@@ -24,7 +24,7 @@ services:
   # WHISK CONTROLLER
   controller:
     image: openwhisk/controller:368dd80
-    command: /bin/sh -c "exec /init.sh 0 >> /logs/controller-local_logs.log 2>&1"
+    command: /bin/sh -c "exec /init.sh 0"
     privileged: true
     pid: "host"
     userns_mode: "host"
@@ -49,7 +49,6 @@ services:
       CONFIG_whisk_spi_MessagingProvider: org.apache.openwhisk.connector.lean.LeanMessagingProvider
       CONFIG_whisk_spi_LoadBalancerProvider: org.apache.openwhisk.core.loadBalancer.LeanBalancer
     volumes:
-      - ~/tmp/openwhisk/controller/logs:/logs
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/containers:/containers
       - /sys/fs/cgroup:/sys/fs/cgroup
