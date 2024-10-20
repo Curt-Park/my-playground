@@ -1,0 +1,16 @@
+---
+networks:
+  nuclio: {}
+  ingress:
+    name: ingress
+    external: true
+
+services:
+  nuclio-dashboard:
+    image: quay.io/nuclio/dashboard:stable-arm64
+    container_name: nuclio-dashboard
+    ports:
+      - 8070:8070
+    networks:
+      - nuclio
+    restart: always
