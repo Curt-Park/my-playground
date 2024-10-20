@@ -1,0 +1,76 @@
+---
+networks:
+  openfaas: {}
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  nats_data: {}
+
+nats:
+  image: docker.io/library/nats-streaming:0.25.6
+  command:
+    - "/nats-streaming-server"
+    - "-m"
+    - "8222"
+    - "--store=file"
+    - "--dir=/nats"
+    - "--cluster_id=faas-cluster"
+  ports:
+    - 8222:8222
+  volumes:
+    - nats_data:/nats
+  networks:
+    - openfaas
+  restart: always
+
+prometheus:
+  image: docker.io/prom/prometheus:v2.49.1
+  cap_add:
+    - CAP_NET_RAW
+  ports:
+    - 9090:9090
+  networks:
+    - openfaas
+  restart: always
+
+gateway:
+  image: ghcr.io/openfaas/gateway:0.27.9
+  environment:
+    - direct_functions=false
+    - read_timeout=60s
+    - write_timeout=60s
+    - upstream_timeout=65s
+    - faas_nats_address=nats
+    - faas_nats_port=4222
+    - scale_from_zero=true
+    - function_namespace=openfaas-fn
+  cap_add:
+    - CAP_NET_RAW
+  depends_on:
+    - nats
+    - prometheus
+  ports:
+    - 8080:8080
+  networks:
+    - openfaas
+  restart: always
+
+queue-worker:
+  image: ghcr.io/openfaas/queue-worker:0.14.1
+  environment:
+    - faas_nats_address=nats
+    - faas_nats_port=4222
+    - gateway_invoke=true
+    - faas_gateway_address=gateway
+    - ack_wait=5m5s
+    - max_inflight=1
+    - write_debug=false
+  cap_add:
+    - CAP_NET_RAW
+  depends_on:
+    - nats
+  networks:
+    - openfaas
+  restart: always
