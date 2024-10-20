@@ -25,16 +25,6 @@ nats:
     - openfaas
   restart: always
 
-prometheus:
-  image: docker.io/prom/prometheus:v2.49.1
-  cap_add:
-    - CAP_NET_RAW
-  ports:
-    - 9090:9090
-  networks:
-    - openfaas
-  restart: always
-
 gateway:
   image: ghcr.io/openfaas/gateway:0.27.9
   environment:
@@ -50,7 +40,6 @@ gateway:
     - CAP_NET_RAW
   depends_on:
     - nats
-    - prometheus
   ports:
     - 8080:8080
   networks:
