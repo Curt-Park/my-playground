@@ -7,7 +7,7 @@ networks:
 
 services:
   controller:
-    image: openwhisk/controller:latest
+    image: openwhisk/controller:368dd80
     ports:
       - "3233:3233"
     environment:
@@ -17,7 +17,7 @@ services:
       - ingress
 
   invoker:
-    image: openwhisk/invoker:latest
+    image: openwhisk/invoker:368dd80
     privileged: true
     networks:
       - openwhisk
