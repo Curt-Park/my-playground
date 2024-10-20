@@ -9,12 +9,11 @@ volumes:
   windmilldb_data: {}
   worker_dependency_cache: {}
   worker_logs: {}
-  windmill_index: {}
-  lsp_cache: {}
 
 services:
   windmill-db:
     image: postgres:16
+    container_name: windmill-db
     environment:
       POSTGRES_PASSWORD: changeme
       POSTGRES_DB: windmill
@@ -29,28 +28,33 @@ services:
       - windmilldb_data:/var/lib/postgresql/data
     restart: unless-stopped
 
-  windmill-server:
+  windmill:
     image: ghcr.io/windmill-labs/windmill:1.410.3
+    container_name: windmill
     pull_policy: always
-    expose:
-      - 8000
-      - 2525
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.windmill.entrypoints=websecure
+      - traefik.http.routers.windmill.rule=Host(`windmill.${DOMAIN}`)
+      - traefik.http.services.windmill.loadbalancer.server.port=8000
     environment:
-      - DATABASE_URL=postgres://postgres:changeme@db/windmill?sslmode=disable
+      - DATABASE_URL=postgres://postgres:changeme@windmill-db/windmill?sslmode=disable
       - MODE=server
     depends_on:
       - windmill-db
     networks:
       - windmill
+      - ingress
     volumes:
       - worker_logs:/tmp/windmill/logs
     restart: unless-stopped
 
   windmill-worker:
     image: ghcr.io/windmill-labs/windmill:1.410.3
+    container_name: windmill-worker
     pull_policy: always
     environment:
-      - DATABASE_URL=postgres://postgres:changeme@db/windmill?sslmode=disable
+      - DATABASE_URL=postgres://postgres:changeme@windmill-db/windmill?sslmode=disable
       - MODE=worker
       - WORKER_GROUP=default
     depends_on:
@@ -69,16 +73,18 @@ services:
   windmill-worker-native:
     # Use ghcr.io/windmill-labs/windmill-ee:main for the ee
     image: ghcr.io/windmill-labs/windmill:1.410.3
+    container_name: windmill-worker-native
     pull_policy: always
     environment:
-      - DATABASE_URL=postgres://postgres:changeme@db/windmill?sslmode=disable
+      - DATABASE_URL=postgres://postgres:changeme@windmill-db/windmill?sslmode=disable
       - MODE=worker
       - WORKER_GROUP=native
       - NUM_WORKERS=8
       - SLEEP_QUEUE=200
     depends_on:
-      windmill-db:
-        condition: service_healthy
+      - windmill-db
+    networks:
+      - windmill
     volumes:
       - worker_logs:/tmp/windmill/logs
     restart: unless-stopped
@@ -87,9 +93,10 @@ services:
   # It is assigned the "reports" worker group which has an init script that installs chromium and can be targeted by using the "chromium" worker tag.
   windmill-worker-reports:
     image: ghcr.io/windmill-labs/windmill:1.410.3
+    container_name: windmill-worker-reports
     pull_policy: always
     environment:
-      - DATABASE_URL=postgres://postgres:changeme@db/windmill?sslmode=disable
+      - DATABASE_URL=postgres://postgres:changeme@windmill-db/windmill?sslmode=disable
       - MODE=worker
       - WORKER_GROUP=reports
     depends_on:
@@ -102,40 +109,4 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - worker_dependency_cache:/tmp/windmill/cache
       - worker_logs:/tmp/windmill/logs
-    restart: unless-stopped
-
-  # The indexer powers full-text job and log search, an EE feature.
-  windmill-indexer:
-    image: ghcr.io/windmill-labs/windmill:1.410.3
-    pull_policy: always
-    expose:
-      - 8001
-    environment:
-      - PORT=8001
-      - DATABASE_URL=postgres://postgres:changeme@db/windmill?sslmode=disable
-      - MODE=indexer
-      - TANTIVY_MAX_INDEXED_JOB_LOG_SIZE__MB=1 # job logs bigger than this will be truncated before indexing
-      - TANTIVY_S3_BACKUP_PERIOD__S=3600 # how often to backup the index into object storage
-      - TANTIVY_INDEX_WRITER_MEMORY_BUDGET__MB=100 # higher budget for higher indexing throughput
-      - TANTIVY_REFRESH_INDEX_PERIOD__S=300 #how often to start indexing new jobs
-      - TANTIVY_DOC_COMMIT_MAX_BATCH_SIZE=100000 #how many documents to batch in one commit
-      - TANTIVY_SHOW_MEMORY_EVERY=10000 #log memory usage and progress every so many documents indexed
-    depends_on:
-      - windmill-db
-    networks:
-      - windmill
-    volumes:
-      - windmill_index:/tmp/windmill/search
-      - worker_logs:/tmp/windmill/logs
-    restart: unless-stopped
-
-  lsp:
-    image: ghcr.io/windmill-labs/windmill-lsp:1.410.3
-    pull_policy: always
-    expose:
-      - 3001
-    volumes:
-      - lsp_cache:/root/.cache
-    networks:
-      - windmill
     restart: unless-stopped
