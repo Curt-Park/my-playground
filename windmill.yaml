@@ -68,7 +68,6 @@ services:
   ## This worker is specialized for "native" jobs. Native jobs run in-process and thus are much more lightweight than other jobs
   windmill-worker-native:
     # Use ghcr.io/windmill-labs/windmill-ee:main for the ee
-    image: ${WM_IMAGE}
     image: ghcr.io/windmill-labs/windmill:1.410.3
     pull_policy: always
     environment:
