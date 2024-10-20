@@ -86,6 +86,7 @@ services:
   # This worker is specialized for reports or scraping jobs.
   # It is assigned the "reports" worker group which has an init script that installs chromium and can be targeted by using the "chromium" worker tag.
   windmill-worker-reports:
+    image: ghcr.io/windmill-labs/windmill:1.410.3
     pull_policy: always
     environment:
       - DATABASE_URL=postgres://postgres:changeme@db/windmill?sslmode=disable
