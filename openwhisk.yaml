@@ -1,9 +1,12 @@
 ---
 networks:
-  openwhisk_db: {}
+  openwhisk: {}
   ingress:
     name: ingress
     external: true
+
+volumes:
+  openwhisk_db: {}
 
 services:
   db:
