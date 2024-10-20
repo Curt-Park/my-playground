@@ -33,7 +33,6 @@ services:
     depends_on:
       - db
     env_file:
-      - ./docker-whisk-controller.env   # env vars shared
       - ~/tmp/openwhisk/local.env       # generated during make setup
     environment:
       COMPONENT_NAME: controller
