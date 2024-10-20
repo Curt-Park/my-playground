@@ -112,7 +112,7 @@ services:
       - 8001
     environment:
       - PORT=8001
-      - DATABASE_URL=windmill-db
+      - DATABASE_URL=postgres://postgres:changeme@db/windmill?sslmode=disable
       - MODE=indexer
       - TANTIVY_MAX_INDEXED_JOB_LOG_SIZE__MB=1 # job logs bigger than this will be truncated before indexing
       - TANTIVY_S3_BACKUP_PERIOD__S=3600 # how often to backup the index into object storage
