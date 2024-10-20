@@ -1,0 +1,31 @@
+---
+networks:
+  openwhisk: {}
+  ingress:
+    name: ingress
+    external: true
+
+services:
+  controller:
+    image: openwhisk/controller:latest
+    ports:
+      - "3233:3233"
+    environment:
+      - DB_HOST=db
+    networks:
+      - openwhisk
+      - ingress
+
+  invoker:
+    image: openwhisk/invoker:latest
+    privileged: true
+    networks:
+      - openwhisk
+
+  db:
+    image: couchdb:3.1.1
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+    networks:
+      - openwhisk
