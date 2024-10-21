@@ -1,0 +1,119 @@
+# https://docs.n8n.io/hosting/installation/server-setups/docker-compose
+---
+networks:
+  n8n: {}
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  n8n_data: {}
+  n8n-db_data: {}
+  n8n-mq_data: {}
+
+services:
+  n8n-db:
+    image: postgres:16-alpine
+    container_name: n8n-db
+    networks: ['demo']
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - n8n-db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  n8n-mq:
+    image: redis:7.4.1
+		container_name: n8n-mq
+    volumes:
+      - n8n-mq_data:/data
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:1.62.6
+    container_name: n8n-main
+		ports:
+			- 5678:5678
+    environment:
+      # N8n deployment
+      N8N_HOST: n8n.${DOMAIN}
+      N8N_PROTOCOL: https
+      N8N_SMTP_HOST: ${N8N_SMTP_HOST}
+      N8N_SMTP_PORT: ${N8N_SMTP_PORT}
+      N8N_SMTP_USER: ${N8N_SMTP_USER:-${EMAIL}}
+      N8N_SMTP_SENDER: ${N8N_SMTP_SENDER:-${EMAIL}}
+      N8N_SMTP_PASS: ${N8N_SMTP_PASS}
+      N8N_PROXY_HOPS: 1
+      # db
+      DB_POSTGRESDB_DATABASE: postgres
+      DB_POSTGRESDB_USER: postgres
+      DB_POSTGRESDB_PASSWORD: pass
+      DB_POSTGRESDB_HOST: n8n-db
+      DB_POSTGRESDB_PORT: 5432
+      DB_TYPE: postgresdb
+      # N8n queue mode
+      N8N_ENCRYPTION_KEY: ae1e030c-2bb1-4175-9028-20c2d87276c5
+      QUEUE_BULL_REDIS_HOST: redis
+      QUEUE_BULL_REDIS_PORT: 6379
+      N8N_DISABLE_PRODUCTION_MAIN_PROCESS: true
+      N8N_SKIP_WEBHOOK_DEREGISTRATION_SHUTDOWN: true
+      # General
+      GENERIC_TIMEZONE: ${TIMEZONE}
+      TZ: ${TIMEZONE}
+    networks:
+      - n8n
+      - ingress
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      - n8n-db
+    restart: always
+
+  n8n-workers:
+    image: n8nio/n8n
+    command: ["n8n", "worker"]
+		deploy:
+			replicas: 2
+    environment:
+      N8N_ENCRYPTION_KEY: ae1e030c-2bb1-4175-9028-20c2d87276c5
+      EXECUTIONS_MODE: queue
+      QUEUE_BULL_REDIS_HOST: n8n-mq
+      QUEUE_BULL_REDIS_PORT: 6379
+      DB_POSTGRESDB_DATABASE: postgres
+      DB_POSTGRESDB_USER: postgres
+      DB_POSTGRESDB_PASSWORD: pass
+      DB_POSTGRESDB_HOST: n8n-db
+      DB_POSTGRESDB_PORT: 5432
+      DB_TYPE: postgresdb
+    depends_on:
+      - n8n-db
+      - n8n-mq
+      - n8n
+    restart: always
+
+  n8n-webhooks:
+    image: n8nio/n8n
+    command: ["n8n", "webhook"]
+    environment:
+      N8N_ENCRYPTION_KEY: ae1e030c-2bb1-4175-9028-20c2d87276c5
+      WEBHOOK_URL: https://n8n.${DOMAIN}/
+      EXECUTIONS_MODE: queue
+      QUEUE_BULL_REDIS_HOST: n8n-mq
+      QUEUE_BULL_REDIS_PORT: 6379
+      DB_POSTGRESDB_DATABASE: postgres
+      DB_POSTGRESDB_USER: postgres
+      DB_POSTGRESDB_PASSWORD: pass
+      DB_POSTGRESDB_HOST: n8n-db
+      DB_POSTGRESDB_PORT: 5432
+      DB_TYPE: postgresdb
+    depends_on:
+      - n8n-db
+      - n8n-mq
+      - n8n
+    restart: always
