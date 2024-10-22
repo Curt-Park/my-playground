@@ -52,13 +52,15 @@ services:
       # N8n deployment
       N8N_HOST: n8n.${DOMAIN}
       N8N_PROTOCOL: https
+      N8N_PROXY_HOPS: 1
+      N8N_SECURE_COOKIE: false
       WEBHOOK_URL: https://n8n.${DOMAIN}/
+      # smtp
       N8N_SMTP_HOST: ${N8N_SMTP_HOST}
       N8N_SMTP_PORT: ${N8N_SMTP_PORT}
       N8N_SMTP_USER: ${N8N_SMTP_USER:-${EMAIL}}
       N8N_SMTP_SENDER: ${N8N_SMTP_SENDER:-${EMAIL}}
       N8N_SMTP_PASS: ${N8N_SMTP_PASS}
-      N8N_PROXY_HOPS: 1
       # db
       DB_POSTGRESDB_DATABASE: ${N8N_DATABASE_NAME}
       DB_POSTGRESDB_USER: ${N8N_DATABASE_USER}
@@ -70,7 +72,6 @@ services:
       N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
       QUEUE_BULL_REDIS_HOST: n8n-mq
       QUEUE_BULL_REDIS_PORT: 6379
-      N8N_DISABLE_PRODUCTION_MAIN_PROCESS: true
       # General
       GENERIC_TIMEZONE: ${TIMEZONE}
       TZ: ${TIMEZONE}
@@ -88,28 +89,6 @@ services:
     command: ["worker"]
     deploy:
       replicas: 2
-    environment:
-      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
-      EXECUTIONS_MODE: queue
-      QUEUE_BULL_REDIS_HOST: n8n-mq
-      QUEUE_BULL_REDIS_PORT: 6379
-      DB_POSTGRESDB_DATABASE: ${N8N_DATABASE_NAME}
-      DB_POSTGRESDB_USER: ${N8N_DATABASE_USER}
-      DB_POSTGRESDB_PASSWORD: ${N8N_DATABASE_PW}
-      DB_POSTGRESDB_HOST: n8n-db
-      DB_POSTGRESDB_PORT: 5432
-      DB_TYPE: postgresdb
-    networks:
-      - n8n
-    depends_on:
-      - n8n-db
-      - n8n-mq
-      - n8n
-    restart: unless-stopped
-
-  n8n-webhooks:
-    image: docker.n8n.io/n8nio/n8n:1.62.6
-    command: ["webhook"]
     environment:
       N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
       EXECUTIONS_MODE: queue
