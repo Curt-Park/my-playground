@@ -17,6 +17,8 @@ services:
       - traefik.http.services.filebrowser.loadbalancer.server.port=8080
     image: hurlenko/filebrowser:latest
     container_name: filebrowser
+    environment:
+      - FB_BASEURL=/
     volumes:
       - filebrowser:/data
     networks:
