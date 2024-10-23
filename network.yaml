@@ -45,6 +45,7 @@ services:
     environment:
       - CF_API_EMAIL=${EMAIL}
       - CF_DNS_API_TOKEN=${CF_TOKEN}
+      - LEGO_DISABLE_CNAME_SUPPORT=true
     ports:
       # The HTTP port
       - 80:80
