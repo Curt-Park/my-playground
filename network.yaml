@@ -26,7 +26,7 @@ services:
       - --entryPoints.web.http.redirections.entryPoint.scheme=https
 
       # Set up LetsEncrypt
-      - --certificatesresolvers.myresolver.acme.tlschallenge=false
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.myresolver.acme.email=${EMAIL}

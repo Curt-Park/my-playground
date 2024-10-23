@@ -1,6 +1,8 @@
 ---
 networks:
-  filebrowser: {}
+  ingress:
+    name: ingress
+    external: true
 
 volumes:
   filebrowser: {}
@@ -23,5 +25,5 @@ services:
       - filebrowser:/data
       - filebrowser_config:/config
     networks:
-      - filebrowser
+      - ingress
     restart: always
