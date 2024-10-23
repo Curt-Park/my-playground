@@ -6,6 +6,7 @@ networks:
 
 volumes:
   traefik: {}
+  authelia: {}
 
 services:
   traefik:
@@ -32,14 +33,18 @@ services:
       - --certificatesresolvers.myresolver.acme.storage=/traefik_vol/acme.json
       - --certificatesresolvers.myresolver.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
 
-      # Set up the TLS configuration for our websecure listener (basically gives wildcard cert for the main domain)
+      # Set up the TLS configuration for our websecure listener
+      # (basically gives wildcard cert for the main domain)
       - --entrypoints.websecure.http.tls=true
       - --entrypoints.websecure.http.tls.certResolver=myresolver
       - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}
       - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}
 
-      # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
+      # Allow these IPs to set the X-Forwarded-* headers
+      # Cloudflare IPs: https://www.cloudflare.com/ips/
       - --entrypoints.web.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/12,172.64.0.0/13,131.0.72.0/22
+    labels:
+      - traefik.http.routers.api.middlewares=authelia@docker
     environment:
       - CF_API_EMAIL=${EMAIL}
       - CF_DNS_API_TOKEN=${CF_TOKEN}
@@ -82,19 +87,37 @@ services:
     # - "1.x.y" to pin the specific version 1.x.y
     image: favonia/cloudflare-ddns:latest
     container_name: cloudflare-ddns
-    # This bypasses network isolation and makes IPv6 easier (optional; see below)
+    # This bypasses network isolation and makes IPv6 easier
+    # (optional; see below)
     network_mode: host
     # Make the container filesystem read-only (optional but recommended)
     read_only: true
     # Drop all Linux capabilities (optional but recommended)
     cap_drop: [all]
-    # Another protection to restrict superuser privileges (optional but recommended)
+    # Another protection to restrict superuser privileges
+    # (optional but recommended)
     security_opt: [no-new-privileges:true]
     environment:
-        # Your Cloudflare API token
+      # Your Cloudflare API token
       - CF_API_TOKEN=${CF_TOKEN}
-        # Your domains (separated by commas)
+      # Your domains (separated by commas)
       - DOMAINS=${DOMAIN}
-        # Tell Cloudflare to cache webpages and hide your IP (optional)
+      # Tell Cloudflare to cache webpages and hide your IP (optional)
       - PROXIED=true
+    restart: always
+
+  authelia:
+    image: authelia/authelia:4.38
+    container_name: authelia
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.authelia.rule=Host(`authelia.${DOMAIN}`)
+      - traefik.http.routers.authelia.entrypoints=websecure
+      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://authelia.${DOMAIN}
+      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
+      - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
+    volumes:
+      - authelia:/config
+    networks:
+      - ingress
     restart: always

@@ -21,6 +21,8 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
     - traefik
     - cloudflare-companion
     - cloudflare-ddns
+- `monolithic.yaml`
+    - monolithic backend for supporting other services
 - `n8n.yaml`
     - n8n
 - `nocodb.yaml`
