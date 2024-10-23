@@ -1,6 +1,5 @@
 ---
 networks:
-  monolithic: {}
   ingress:
     name: ingress
     external: true
@@ -13,6 +12,5 @@ services:
     labels:
       - traefik.enable=false
     networks:
-      - monolithic
       - ingress
     restart: always
