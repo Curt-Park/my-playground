@@ -2,7 +2,6 @@
 # https://docs.n8n.io/hosting/configuration/environment-variables/
 ---
 networks:
-  n8n: {}
   ingress:
     name: ingress
     external: true
@@ -28,7 +27,7 @@ services:
     volumes:
       - n8n-db_data:/var/lib/postgresql/data
     networks:
-      - n8n
+      - ingress
     restart: unless-stopped
 
   n8n-mq:
@@ -37,7 +36,7 @@ services:
     volumes:
       - n8n-mq_data:/data
     networks:
-      - n8n
+      - ingress
     restart: unless-stopped
 
   n8n:
@@ -76,7 +75,6 @@ services:
       GENERIC_TIMEZONE: ${TIMEZONE}
       TZ: ${TIMEZONE}
     networks:
-      - n8n
       - ingress
     volumes:
       - n8n_data:/home/node/.n8n
@@ -101,7 +99,7 @@ services:
       DB_POSTGRESDB_PORT: 5432
       DB_TYPE: postgresdb
     networks:
-      - n8n
+      - ingress
     depends_on:
       - n8n-db
       - n8n-mq
