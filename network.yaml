@@ -26,19 +26,11 @@ services:
       - --entryPoints.web.http.redirections.entryPoint.scheme=https
 
       # Set up LetsEncrypt
-      - --certificatesresolvers.myresolver.acme.tlschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.myresolver.acme.email=${EMAIL}
       - --certificatesresolvers.myresolver.acme.storage=/traefik_vol/acme.json
       - --certificatesresolvers.myresolver.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53
-
-      # Set up the TLS configuration for our websecure listener
-      # (basically gives wildcard cert for the main domain)
-      - --entrypoints.websecure.http.tls=true
-      - --entrypoints.websecure.http.tls.certResolver=myresolver
-      - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}
-      - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}
 
       # Allow these IPs to set the X-Forwarded-* headers
       # Cloudflare IPs: https://www.cloudflare.com/ips/
