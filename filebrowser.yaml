@@ -1,10 +1,10 @@
 ---
 networks:
   filebrowser: {}
-  filebrowser_config: {}
 
 volumes:
   filebrowser: {}
+  filebrowser_config: {}
 
 services:
   filebrowser:
