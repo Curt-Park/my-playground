@@ -6,10 +6,12 @@ networks:
     external: true
 
 services:
-  n8n:
+  monolithic:
     # port: 9888
     image: curtpark/monolithic_server:latest
     container_name: monolithic
+    labels:
+      - traefik.enable=false
     networks:
       - monolithic
       - ingress
