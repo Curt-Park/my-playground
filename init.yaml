@@ -12,6 +12,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.web.tls.certresolver=myresolver
       - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN}`)
       - traefik.http.services.portainer.loadbalancer.server.port=9000
     image: portainer/portainer-ce:latest
