@@ -1,22 +1,16 @@
 ---
 networks:
   filebrowser: {}
-  ingress:
-    name: ingress
-    external: true
 
 volumes:
   filebrowser: {}
 
 services:
   filebrowser:
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.filebrowser.entrypoints=websecure
-      - traefik.http.routers.filebrowser.rule=Host(`filebrowser.${DOMAIN}`)
-      - traefik.http.services.filebrowser.loadbalancer.server.port=8080
     image: hurlenko/filebrowser:latest
     container_name: filebrowser
+    ports:
+      - 18080:8080
     environment:
       - FB_BASEURL=/
     volumes:
