@@ -17,5 +17,4 @@ services:
       - filebrowser:/data
     networks:
       - filebrowser
-      - ingress
     restart: always
