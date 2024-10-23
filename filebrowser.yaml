@@ -15,8 +15,11 @@ services:
       - traefik.http.routers.filebrowser.entrypoints=websecure
       - traefik.http.routers.filebrowser.rule=Host(`filebrowser.${DOMAIN}`)
       - traefik.http.services.filebrowser.loadbalancer.server.port=8080
-    image: hurlenko/filebrowser
+    image: hurlenko/filebrowser:latest
     container_name: filebrowser
     volumes:
       - filebrowser:/data
+    networks:
+      - filebrowser
+      - ingress
     restart: always
