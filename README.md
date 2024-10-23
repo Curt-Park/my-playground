@@ -17,6 +17,7 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
 ## Service Stacks
 - `init.yaml`
     - portainer
+- `filebrowser.yaml`
 - `network.yaml`
     - traefik
     - cloudflare-companion
@@ -24,9 +25,8 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
 - `monolithic.yaml`
     - monolithic backend for supporting other services
 - `n8n.yaml`
-    - n8n
 - `nocodb.yaml`
     - nocodb
     - nocodb-db (postgresql)
 - `qdrant.yaml`
-    - qdrant
+- `dozzle.yaml` (this requires filebrowser)
