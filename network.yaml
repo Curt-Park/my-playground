@@ -44,7 +44,7 @@ services:
       - --entrypoints.web.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/12,172.64.0.0/13,131.0.72.0/22
     environment:
       - CF_API_EMAIL=${EMAIL}
-      - CF_DNS_API_TOKEN=${CF_TOKEN}
+      - CF_DNS_API_TOKEN=${CF_DNS_TOKEN}
       - LEGO_DISABLE_CNAME_SUPPORT=true
     ports:
       # The HTTP port
@@ -65,7 +65,7 @@ services:
     container_name: cloudflare-companion
     environment:
       - CF_EMAIL=${EMAIL}
-      - CF_TOKEN=${CF_TOKEN}
+      - CF_TOKEN=${CF_GLOBAL_TOKEN}
       - TARGET_DOMAIN=${DOMAIN}
       - DOMAIN1=${DOMAIN}
       - DOMAIN1_PROXIED=true
@@ -99,7 +99,7 @@ services:
     security_opt: [no-new-privileges:true]
     environment:
       # Your Cloudflare API token
-      - CF_API_TOKEN=${CF_TOKEN}
+      - CF_API_TOKEN=${CF_DNS_TOKEN}
       # Your domains (separated by commas)
       - DOMAINS=${DOMAIN}
       # Tell Cloudflare to cache webpages and hide your IP (optional)
