@@ -1,0 +1,22 @@
+---
+networks:
+  filebrowser: {}
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  filebrowser: {}
+
+services:
+  filebrowser:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
+      - traefik.http.services.traefik.loadbalancer.server.port=5678
+    image: hurlenko/filebrowser
+    container_name: filebrowser
+    volumes:
+      - filebrowser:/data
+    restart: always
