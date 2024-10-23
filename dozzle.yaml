@@ -5,6 +5,11 @@ networks:
     name: ingress
     external: true
 
+volumes:
+  filebrowser:
+    name: filebrowser_filebrowser
+    external: true
+
 services:
   dozzle:
     image: amir20/dozzle:latest
@@ -13,12 +18,18 @@ services:
       - traefik.enable=true
       - traefik.http.routers.dozzle.entrypoints=websecure
       - traefik.http.routers.dozzle.rule=Host(`dozzle.${DOMAIN}`)
-      - traefik.http.routers.dozzle.middlewares=authelia@docker
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
     ports:
       - 18888:8080
+    environment:
+      - DOZZLE_AUTH_PROVIDER: simple
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - type: volume
+        source: filebrowser
+        target: /data
+        volume:
+          subpath: dozzle
     networks:
       - ingress
       - dozzle
