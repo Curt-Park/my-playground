@@ -1,6 +1,5 @@
 ---
 networks:
-  dozzle: {}
   ingress:
     name: ingress
     external: true
@@ -33,4 +32,3 @@ services:
           subpath: dozzle
     networks:
       - ingress
-      - dozzle
