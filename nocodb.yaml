@@ -1,6 +1,5 @@
 ---
 networks:
-  nocodb: {}
   ingress:
     name: ingress
     external: true
@@ -23,7 +22,6 @@ services:
       - traefik.http.routers.nocodb.rule=Host(`nocodb.${DOMAIN}`)
       - traefik.http.services.nocodb.loadbalancer.server.port=8080
     networks:
-      - nocodb
       - ingress
     depends_on:
       - nocodb-db
@@ -44,7 +42,7 @@ services:
       test: pg_isready -U ${NOCODB_DATABASE_USER} -d ${NOCODB_DATABASE_NAME}
       timeout: 2s
     networks:
-      - nocodb
+      - ingress
     volumes:
       - nocodb_db:/var/lib/postgresql/data
     restart: always
