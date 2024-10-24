@@ -1,0 +1,117 @@
+---
+networks:
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  database: {}
+  redis: {}
+  authentik: {}
+
+
+services:
+  authentik-db:
+    image: docker.io/library/postgres:16-alpine
+    container_name: authentik-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    environment:
+      POSTGRES_PASSWORD: ${AUTHENTIK_PG_PASS}
+      POSTGRES_USER: ${PG_USER:-authentik}
+      POSTGRES_DB: ${PG_DB:-authentik}
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      - ingress
+    restart: unless-stopped
+
+  authentik-mq:
+    image: docker.io/library/redis:alpine
+    container_name: authentik-mq
+    command: --save 60 1 --loglevel warning
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - redis:/data
+    networks:
+      - ingress
+    restart: unless-stopped
+
+  authentik:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.8.3}
+    container_name: authentik
+    command: server
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.authentik.entrypoints=websecure
+      - traefik.http.routers.authentik.rule=Host(`${DOMAIN}`)
+      - traefik.http.services.authentik.loadbalancer.server.port=9000
+    ports:
+      - "${COMPOSE_PORT_HTTP:-9080}:9000"
+      - "${COMPOSE_PORT_HTTPS:-9443}:9443"
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
+    depends_on:
+      - postgresql
+      - redis
+    volumes:
+      - type: volume
+        source: authentik
+        target: /media
+        volume:
+          subpath: media
+      - type: volume
+        source: authentik
+        target: /custom-templates
+        volume:
+          subpath: custom-templates
+    networks:
+      - ingress
+    restart: unless-stopped
+
+  authentik-worker:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.8.3}
+    container_name: authentik-worker
+    command: worker
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
+    depends_on:
+      - postgresql
+      - redis
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - type: volume
+        source: authentik
+        target: /media
+        volume:
+          subpath: media
+      - type: volume
+        source: authentik
+        target: /certs
+        volume:
+          subpath: certs
+      - type: volume
+        source: authentik
+        target: /custom-templates
+        volume:
+          subpath: custom-templates
+    networks:
+      - ingress
+    restart: unless-stopped
