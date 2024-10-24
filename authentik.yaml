@@ -101,7 +101,7 @@ services:
     restart: unless-stopped
 
   authentik-proxy:
-    image: ghcr.io/goauthentik/proxy-2024.8.3
+    image: ghcr.io/goauthentik/proxy:2024.8.3
     environment:
       AUTHENTIK_HOST: http://authentik
       AUTHENTIK_INSECURE: "false"
