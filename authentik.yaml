@@ -107,6 +107,7 @@ services:
       AUTHENTIK_HOST: https://${DOMAIN}
       AUTHENTIK_INSECURE: "false"
       AUTHENTIK_TOKEN: ${AUTHENTIK_ACCESS_TOKEN}
+      AUTHENTIK_DEBUG: true
     labels:
       - traefik.enable=true
       - traefik.port=9000
