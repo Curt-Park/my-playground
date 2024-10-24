@@ -66,12 +66,13 @@ services:
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
     depends_on:
       - authentik-db
       - authentik-mq
     volumes:
       - media:/media
-      - custom-templates:/custom-templates
+      - custom-templates:/templates
     networks:
       - ingress
     restart: unless-stopped
@@ -86,6 +87,7 @@ services:
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
     depends_on:
       - authentik-db
       - authentik-mq
@@ -93,7 +95,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - certs:/certs
       - media:/media
-      - custom-templates:/custom-templates
+      - custom-templates:/templates
     networks:
       - ingress
     restart: unless-stopped
