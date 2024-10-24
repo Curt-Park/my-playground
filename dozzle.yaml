@@ -16,6 +16,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.dozzle.entrypoints=websecure
+      - traefik.http.routers.dozlle.middlewares=authentik@docker
       - traefik.http.routers.dozzle.rule=Host(`dozzle.${DOMAIN}`)
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
     ports:
@@ -32,3 +33,4 @@ services:
           subpath: dozzle
     networks:
       - ingress
+    restart: unless-stopped
