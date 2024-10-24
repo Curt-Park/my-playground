@@ -59,14 +59,14 @@ services:
       - "${COMPOSE_PORT_HTTP:-9080}:9000"
       - "${COMPOSE_PORT_HTTPS:-9443}:9443"
     environment:
-      AUTHENTIK_REDIS__HOST: redis
-      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_REDIS__HOST: authentik-mq
+      AUTHENTIK_POSTGRESQL__HOST: authentik-db
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
     depends_on:
-      - postgresql
-      - redis
+      - authentik-db
+      - authentik-mq
     volumes:
       - type: volume
         source: authentik
@@ -87,14 +87,14 @@ services:
     container_name: authentik-worker
     command: worker
     environment:
-      AUTHENTIK_REDIS__HOST: redis
-      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_REDIS__HOST: authentik-mq
+      AUTHENTIK_POSTGRESQL__HOST: authentik-db
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS}
     depends_on:
-      - postgresql
-      - redis
+      - authentik-db
+      - authentik-mq
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - type: volume
