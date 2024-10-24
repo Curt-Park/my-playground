@@ -7,7 +7,9 @@ networks:
 volumes:
   database: {}
   redis: {}
-  authentik: {}
+  media: {}
+  certs: {}
+  custom-templates: {}
 
 
 services:
@@ -68,16 +70,8 @@ services:
       - authentik-db
       - authentik-mq
     volumes:
-      - type: volume
-        source: authentik
-        target: /media
-        volume:
-          subpath: media
-      - type: volume
-        source: authentik
-        target: /custom-templates
-        volume:
-          subpath: custom-templates
+      - media:/media
+      - custom-templates:/custom-templates
     networks:
       - ingress
     restart: unless-stopped
@@ -97,21 +91,9 @@ services:
       - authentik-mq
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - type: volume
-        source: authentik
-        target: /media
-        volume:
-          subpath: media
-      - type: volume
-        source: authentik
-        target: /certs
-        volume:
-          subpath: certs
-      - type: volume
-        source: authentik
-        target: /custom-templates
-        volume:
-          subpath: custom-templates
+      - certs:/certs
+      - media:/media
+      - custom-templates:/custom-templates
     networks:
       - ingress
     restart: unless-stopped
