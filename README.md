@@ -56,6 +56,7 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
   - n8n
   - filebrowser
   - n8n
+    - need to set `/webhook/*` in `Unauthenticated Paths` of the n8n provider
   - nocodb
   - qdrant
   - traefik
