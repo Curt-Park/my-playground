@@ -102,6 +102,7 @@ services:
 
   authentik-proxy:
     image: ghcr.io/goauthentik/proxy:2024.8.3
+    container_name: authentik-proxy
     environment:
       AUTHENTIK_HOST: https://${DOMAIN}
       AUTHENTIK_INSECURE: "false"
