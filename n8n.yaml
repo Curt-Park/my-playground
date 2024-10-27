@@ -46,6 +46,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.n8n.entrypoints=websecure
       - traefik.http.routers.n8n.rule=Host(`n8n.${DOMAIN}`)
+      - traefik.http.routers.n8n.middlewares=authentik-proxy@docker
       - traefik.http.services.n8n.loadbalancer.server.port=5678
     environment:
       # N8n deployment

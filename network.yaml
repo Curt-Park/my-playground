@@ -12,6 +12,12 @@ services:
   traefik:
     image: traefik:v3.1.2
     container_name: traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
+      - traefik.http.routers.traefik.middlewares=authentik-proxy@docker
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
     command:
       - --log.level=INFO
       - --providers.docker=true

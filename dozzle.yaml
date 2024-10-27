@@ -19,11 +19,6 @@ services:
       - traefik.http.routers.dozzle.rule=Host(`dozzle.${DOMAIN}`)
       - traefik.http.routers.dozzle.middlewares=authentik-proxy@docker
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
-    ports:
-      - 18888:8080
-    environment:
-      DOZZLE_AUTH_PROVIDER: simple
-      DOZZLE_AUTH_TTL: 48h
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - type: volume

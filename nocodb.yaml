@@ -20,6 +20,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.nocodb.entrypoints=websecure
       - traefik.http.routers.nocodb.rule=Host(`nocodb.${DOMAIN}`)
+      - traefik.http.routers.nocodb.middlewares=authentik-proxy@docker
       - traefik.http.services.nocodb.loadbalancer.server.port=8080
     networks:
       - ingress
