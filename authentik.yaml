@@ -55,7 +55,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.authentik.entrypoints=websecure
-      - traefik.http.routers.authentik.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.authentik.rule=Host(`authentik.${DOMAIN}`)
       - traefik.http.services.authentik.loadbalancer.server.port=9000
     ports:
       - "${COMPOSE_PORT_HTTP:-9080}:9000"
