@@ -104,14 +104,14 @@ services:
     image: ghcr.io/goauthentik/proxy:2024.8.3
     container_name: authentik-proxy
     environment:
-      AUTHENTIK_HOST: https://${DOMAIN}
+      AUTHENTIK_HOST: https://authentik.${DOMAIN}
       AUTHENTIK_INSECURE: "false"
       AUTHENTIK_TOKEN: ${AUTHENTIK_ACCESS_TOKEN}
       AUTHENTIK_DEBUG: true
     labels:
       - traefik.enable=true
       - traefik.port=9000
-      - traefik.http.routers.authentik.rule=Host(`${DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      - traefik.http.routers.authentik.rule=Host(`authentik.${DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)
       # `authentik-proxy` refers to the service name in the compose file.
       - traefik.http.middlewares.authentik.forwardauth.address=http://authentik-proxy:9000/outpost.goauthentik.io/auth/traefik
       - traefik.http.middlewares.authentik.forwardauth.trustForwardHeader=true
