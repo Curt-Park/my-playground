@@ -110,7 +110,7 @@ services:
       AUTHENTIK_DEBUG: true
     labels:
       - traefik.enable=true
-      - traefik.port=9000
+      - traefik.http.routers.authentik-proxy.entrypoints=websecure
       - traefik.http.routers.authentik-proxy.rule=Host(`${DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)
       # `authentik-proxy` refers to the service name in the compose file.
       - traefik.http.middlewares.authentik-proxy.forwardauth.address=http://authentik-proxy:9000/outpost.goauthentik.io/auth/traefik
