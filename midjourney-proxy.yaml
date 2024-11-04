@@ -43,10 +43,10 @@ services:
         target: /app/wwwroot/ephemeral-attachments
         volume:
           subpath: midjourney-proxy/ephemeral-attachments
-      - type: volume
+      - type: bind
         source: filebrowser
         target: /app/appsettings.Production.json
-        volume:
+        bind:
           subpath: midjourney-proxy/appsettings.Production.json
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
