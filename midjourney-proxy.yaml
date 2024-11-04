@@ -22,7 +22,6 @@ services:
       - traefik.http.services.midjourney-proxy.loadbalancer.server.port=8080
     user: root
     environment:
-      - DEMO=true
       - TZ=${TIMEZONE}
     volumes:
       - midjourney-proxy-logs:/app/logs:rw
