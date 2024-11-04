@@ -5,9 +5,10 @@ networks:
     external: true
 
 volumes:
-  filebrowser:
-    name: filebrowser_filebrowser
-    external: true
+  midjourney-proxy-logs: {}
+  midjourney-proxy-atta: {}
+  midjourney-proxy-eatt: {}
+  midjourney-proxy-data: {}
 
 services:
   midjourney-proxy:
@@ -23,31 +24,10 @@ services:
       - DEMO=true
       - TZ=${TIMEZONE}
     volumes:
-      - type: volume
-        source: filebrowser
-        target: /app/logs
-        volume:
-          subpath: midjourney-proxy/logs
-      - type: volume
-        source: filebrowser
-        target: /app/data
-        volume:
-          subpath: midjourney-proxy/data
-      - type: volume
-        source: filebrowser
-        target: /app/wwwroot/attachments
-        volume:
-          subpath: midjourney-proxy/attachments
-      - type: volume
-        source: filebrowser
-        target: /app/wwwroot/ephemeral-attachments
-        volume:
-          subpath: midjourney-proxy/ephemeral-attachments
-      - type: bind
-        source: filebrowser
-        target: /app/appsettings.Production.json
-        bind:
-          subpath: midjourney-proxy/appsettings.Production.json
+      - midjourney-proxy-logs:/app/logs:rw
+      - midjourney-proxy-data:/app/data:rw
+      - midjourney-proxy-atta:/app/wwwroot/attachments:rw
+      - midjourney-proxy-eatt:/app/wwwroot/ephemeral-attachments:rw
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     networks:
