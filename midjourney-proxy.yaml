@@ -54,4 +54,6 @@ services:
         target: /etc/timezone
         volume:
           subpath: midjourney-proxy/timezone
+    networks:
+      - ingress
     restart: always
