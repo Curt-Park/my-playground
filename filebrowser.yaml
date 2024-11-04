@@ -18,8 +18,6 @@ services:
       - traefik.http.routers.filebrowser.rule=Host(`filebrowser.${DOMAIN}`)
       - traefik.http.routers.filebrowser.middlewares=authentik-proxy@docker
       - traefik.http.services.filebrowser.loadbalancer.server.port=8080
-    ports:
-      - 18080:8080
     environment:
       - FB_BASEURL=/
     volumes:
