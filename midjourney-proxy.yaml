@@ -20,6 +20,7 @@ services:
       - traefik.http.routers.midjourney-proxy.rule=Host(`midjourney-proxy.${DOMAIN}`)
       - traefik.http.routers.midjourney-proxy.middlewares=authentik-proxy@docker
       - traefik.http.services.midjourney-proxy.loadbalancer.server.port=8080
+    user: root
     environment:
       - DEMO=true
       - TZ=${TIMEZONE}
