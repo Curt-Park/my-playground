@@ -13,11 +13,15 @@ services:
   midjourney-proxy:
     image: curtpark/midjourney-proxy:v5.10.0
     container_name: midjourney-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.midjourney-proxy.entrypoints=websecure
+      - traefik.http.routers.midjourney-proxy.rule=Host(`midjourney-proxy.${DOMAIN}`)
+      - traefik.http.routers.midjourney-proxy.middlewares=authentik-proxy@docker
+      - traefik.http.services.midjourney-proxy.loadbalancer.server.port=8080
     environment:
       - DEMO=true
       - TZ=${TIMEZONE}
-    ports:
-      - 8086:18080
     volumes:
       - type: volume
         source: filebrowser
