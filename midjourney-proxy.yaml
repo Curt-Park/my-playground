@@ -17,7 +17,7 @@ services:
       - DEMO=true
       - TZ=${TIMEZONE}
     ports:
-      - 18080:8080
+      - 8080:8080
     volumes:
       - type: volume
         source: filebrowser
