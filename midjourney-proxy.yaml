@@ -1,0 +1,57 @@
+---
+networks:
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  filebrowser:
+    name: filebrowser_filebrowser
+    external: true
+
+services:
+  midjourney-proxy:
+    image: curtpark/midjourney-proxy:v5.10.0
+    container_name: midjourney-proxy
+    environment:
+      - DEMO=true
+      - TZ=${TIMEZONE}
+    ports:
+      - "8086:8080"
+    volumes:
+      - type: volume
+        source: filebrowser
+        target: /app/logs
+        volume:
+          subpath: midjourney-proxy/logs
+      - type: volume
+        source: filebrowser
+        target: /app/data
+        volume:
+          subpath: midjourney-proxy/data
+      - type: volume
+        source: filebrowser
+        target: /app/wwwroot/attachments
+        volume:
+          subpath: midjourney-proxy/attachments
+      - type: volume
+        source: filebrowser
+        target: /app/wwwroot/ephemeral-attachments
+        volume:
+          subpath: midjourney-proxy/ephemeral-attachments
+      - type: volume
+        source: filebrowser
+        target: /app/appsettings.Production.json
+        volume:
+          subpath: midjourney-proxy/appsettings.Production.json
+      - type: volume
+        source: filebrowser
+        target: /etc/localtime
+        volume:
+          subpath: midjourney-proxy/localtime
+      - type: volume
+        source: filebrowser
+        target: /etc/timezone
+        volume:
+          subpath: midjourney-proxy/timezone
+    restart: always
