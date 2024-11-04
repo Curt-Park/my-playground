@@ -44,16 +44,8 @@ services:
         target: /app/appsettings.Production.json
         volume:
           subpath: midjourney-proxy/appsettings.Production.json
-      - type: volume
-        source: filebrowser
-        target: /etc/localtime
-        volume:
-          subpath: midjourney-proxy/localtime
-      - type: volume
-        source: filebrowser
-        target: /etc/timezone
-        volume:
-          subpath: midjourney-proxy/timezone
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     networks:
       - ingress
     restart: always
