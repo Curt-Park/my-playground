@@ -14,8 +14,6 @@ services:
   midjourney-proxy:
     image: curtpark/midjourney-proxy:v5.10.0
     container_name: midjourney-proxy
-    ports:
-      - 18080:8080
     labels:
       - traefik.enable=true
       - traefik.http.routers.midjourney-proxy.entrypoints=websecure
