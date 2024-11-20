@@ -84,7 +84,7 @@ services:
     restart: unless-stopped
 
   n8n-workers:
-    image: docker.n8n.io/n8nio/n8n:1.62.6
+    image: docker.n8n.io/n8nio/n8n:1.67.1
     command: ["worker"]
     deploy:
       replicas: 2
