@@ -7,9 +7,10 @@ from http import HTTPStatus
 from typing import Callable
 
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import Response
 from playwright.async_api import async_playwright
+from youtube_transcript_api import YouTubeTranscriptApi
 
 # Logger
 logging.basicConfig(level=logging.DEBUG)
@@ -40,6 +41,19 @@ async def webscraper(url: str) -> str:
         content = await page.content()
         await browser.close()
     return content
+
+
+@app.get("/youtube-transcript")
+def youtube_transcript(video_id: str) -> str:
+    """Return youtube video script as a string."""
+    try:
+        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=("en", "en-US", "ko"))
+        transcript = " ".join([partial_transcript["text"].replace("\n", " ") for partial_transcript in transcript])
+    except Exception as e:
+        msg = str(e).replace("\n", " ")
+        logger.info(msg)
+        raise HTTPException(status_code=404, detail=msg) from e
+    return transcript
 
 
 # Middlewares

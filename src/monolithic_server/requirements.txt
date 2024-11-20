@@ -1,3 +1,4 @@
 ruff == 0.7.0
 fastapi[standard] == 0.115.2
 playwright == 1.47.0
+youtube-transcript-api == 0.6.3
