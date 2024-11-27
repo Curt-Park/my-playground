@@ -25,7 +25,7 @@ services:
       - 'OAUTH_CLIENT_ID=${OPENWEBUI_CLIENT_ID}'
       - 'OAUTH_CLIENT_SECRET=${OPENWEBUI_CLIENT_SECRET}'
       - 'OAUTH_SCOPES=openid email profile'
-      - 'OPENID_REDIRECT_URI=https://${DOMAIN}/oauth/oidc/callback'
+      - 'OPENID_REDIRECT_URI=https://open-webui.${DOMAIN}/oauth/oidc/callback'
     networks:
       - ingress
     volumes:
