@@ -16,7 +16,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.open-webui.entrypoints=websecure
       - traefik.http.routers.open-webui.rule=Host(`open-webui.${DOMAIN}`)
-      - traefik.http.routers.open-webui.middlewares=authentik-proxy@docker
       - traefik.http.services.open-webui.loadbalancer.server.port=8080
     environment:
       - 'ENABLE_OAUTH_SIGNUP=true'
