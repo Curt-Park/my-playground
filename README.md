@@ -36,6 +36,8 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
 - `qdrant.yaml`
 - `dozzle.yaml` (this requires filebrowser)
 - `searxng.yaml`: IMPORTANT! you need to add `json` in `search.formats` (`/etc/searxng/settings.yml`)
+  - searxng
+  - searxng-redis: IMPORTANT! you need to add `redis://searxng-redis:6379/0` in `redis.url` (`/etc/searxng/settings.yml`)
 - `flowise.yaml`
   - flowise
   - flowise-db (postgresql)
