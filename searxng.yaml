@@ -1,0 +1,28 @@
+---
+networks:
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  searxng: {}
+
+services:
+  searxng:
+    image: docker.io/searxng/searxng:2024.12.28-9e32cd204
+    container_name: searxng
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.searxng.entrypoints=websecure
+      - traefik.http.routers.searxng.rule=Host(`searxng.${DOMAIN}`)
+      - traefik.http.routers.searxng.middlewares=authentik-proxy@docker
+      - traefik.http.services.searxng.loadbalancer.server.port=8080
+    environment:
+      - SEARXNG_BASE_URL=https://searxng.${DOMAIN}/
+      - UWSGI_WORKERS=${SEARXNG_UWSGI_WORKERS:-4}
+      - UWSGI_THREADS=${SEARXNG_UWSGI_THREADS:-4}
+    volumes:
+      - searxng:/etc/searxng:rw
+    networks:
+      - ingress
+    restart: always

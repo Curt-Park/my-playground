@@ -35,6 +35,7 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
   - nocodb-db (postgresql)
 - `qdrant.yaml`
 - `dozzle.yaml` (this requires filebrowser)
+- `searxng.yaml`
 - `flowise.yaml`
   - flowise
   - flowise-db (postgresql)
