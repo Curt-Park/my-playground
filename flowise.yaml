@@ -23,7 +23,7 @@ services:
       LOG_LEVEL: debug
       DATABASE_TYPE: postgres
       DATABASE_PORT: 5432
-      DATABASE_HOST: postgres
+      DATABASE_HOST: flowise-db
       DATABASE_NAME: flowise
       DATABASE_USER: ${FLOWISE_DATABASE_USER}
       DATABASE_PASSWORD: ${FLOWISE_DATABASE_PW}
