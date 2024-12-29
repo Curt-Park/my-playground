@@ -35,7 +35,7 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
   - nocodb-db (postgresql)
 - `qdrant.yaml`
 - `dozzle.yaml` (this requires filebrowser)
-- `searxng.yaml`
+- `searxng.yaml`: IMPORTANT! you need to add `json` in `search.formats` (`/etc/searxng/settings.yml`)
 - `flowise.yaml`
   - flowise
   - flowise-db (postgresql)
