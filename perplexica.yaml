@@ -14,11 +14,12 @@ volumes:
 
 services:
   perplexica-frontend:
-    image: itzcrazykns1337/perplexica-frontend:main
+    image: curtpark/perplexica-frontend:409c811
     container_name: perplexica-frontend
     ports:
       - 3000:3000
     environment:
+      # need to build with these as args.
       - NEXT_PUBLIC_API_URL=https://perplexica-backend.${DOMAIN}/api
       - NEXT_PUBLIC_WS_URL=ws://perplexica-backend.${DOMAIN}
     labels:
@@ -62,8 +63,6 @@ services:
         target: /home/perplexica/config.toml
         volume:
           subpath: perplexica-config.toml
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
     networks:
       - ingress
     restart: unless-stopped
