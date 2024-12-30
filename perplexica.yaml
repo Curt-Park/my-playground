@@ -22,9 +22,6 @@ services:
       - traefik.http.routers.perplexica.rule=Host(`perplexica.${DOMAIN}`)
       - traefik.http.routers.perplexica.middlewares=authentik-proxy@docker
       - traefik.http.services.perplexica.loadbalancer.server.port=3000
-    environment:
-      - NEXT_PUBLIC_API_URL=http://perplexica-backend:3001/api
-      - NEXT_PUBLIC_WS_URL=ws://perplexica-backend:3001
     networks:
       - ingress
     depends_on:
@@ -34,6 +31,8 @@ services:
   perplexica-backend:
     image: itzcrazykns1337/perplexica-backend:main
     container_name: perplexica-backend
+    ports:
+      - 3001:3001
     environment:
       - SEARXNG_API_URL=http://searxng:8080
     volumes:
@@ -52,6 +51,8 @@ services:
         target: /home/perplexica/config.toml
         volume:
           subpath: perplexica-config.toml
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     networks:
       - ingress
     restart: unless-stopped
