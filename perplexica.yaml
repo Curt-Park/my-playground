@@ -20,8 +20,8 @@ services:
       - 3000:3000
     environment:
       # need to build with these as args.
-      - NEXT_PUBLIC_API_URL=https://api.perplexica.${DOMAIN}/api
-      - NEXT_PUBLIC_WS_URL=ws://api.perplexica.${DOMAIN}
+      - NEXT_PUBLIC_API_URL=https://perplexica-backend.${DOMAIN}/api
+      - NEXT_PUBLIC_WS_URL=ws://perplexica-backend.${DOMAIN}
     labels:
       - traefik.enable=true
       - traefik.http.routers.perplexica.entrypoints=websecure
@@ -44,7 +44,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.perplexica-backend.entrypoints=websecure
-      - traefik.http.routers.perplexica-backend.rule=Host(`api.perplexica.${DOMAIN}`)
+      - traefik.http.routers.perplexica-backend.rule=Host(`perplexica-backend.${DOMAIN}`)
       - traefik.http.routers.perplexica-backend.middlewares=authentik-proxy@docker
       - traefik.http.services.perplexica-backend.loadbalancer.server.port=3001
     volumes:
