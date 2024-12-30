@@ -39,9 +39,19 @@ services:
     volumes:
       - type: volume
         source: filebrowser
-        target: /home/perplexica
+        target: /home/perplexica/data
         volume:
-          subpath: perplexica
+          subpath: perplexica-data
+      - type: volume
+        source: filebrowser
+        target: /home/perplexica/uploads
+        volume:
+          subpath: perplexica-uploads
+      - type: volume
+        source: filebrowser
+        target: /home/perplexica/config.toml
+        volume:
+          subpath: perplexica-config.toml
     networks:
       - ingress
     restart: unless-stopped
