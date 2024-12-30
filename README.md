@@ -41,6 +41,9 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
 - `flowise.yaml`
   - flowise
   - flowise-db (postgresql)
+- `perplexica.yaml` (this requires searxng and filebrowser)
+  - perplexica-frontend
+  - perplexica-backend
 
 ## Setting up authentication
 

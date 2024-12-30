@@ -1,0 +1,47 @@
+
+---
+networks:
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  n8n_data: {}
+  filebrowser:
+    name: filebrowser_filebrowser
+    external: true
+
+
+services:
+  perplexica-frontend:
+    image: itzcrazykns1337/perplexica-frontend:main
+    container_name: perplexica-frontend
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.perplexica.entrypoints=websecure
+      - traefik.http.routers.perplexica.rule=Host(`perplexica.${DOMAIN}`)
+      - traefik.http.routers.perplexica.middlewares=authentik-proxy@docker
+      - traefik.http.services.perplexica.loadbalancer.server.port=3000
+    environment:
+      - NEXT_PUBLIC_API_URL=http://perplexica-backend:3001/api
+      - NEXT_PUBLIC_WS_URL=ws://perplexica-backend:3001
+    networks:
+      - ingress
+    depends_on:
+      - perplexica-backend
+    restart: unless-stopped
+
+  perplexica-backend:
+    image: itzcrazykns1337/perplexica-backend:main
+    container_name: perplexica-backend
+    environment:
+      - SEARXNG_API_URL=http://searxng:8080
+    volumes:
+      - type: volume
+        source: filebrowser
+        target: /home/perplexica
+        volume:
+          subpath: perplexica
+    networks:
+      - ingress
+    restart: unless-stopped
