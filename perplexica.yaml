@@ -16,6 +16,8 @@ services:
   perplexica-frontend:
     image: itzcrazykns1337/perplexica-frontend:main
     container_name: perplexica-frontend
+    ports:
+      - 3000:3000
     labels:
       - traefik.enable=true
       - traefik.http.routers.perplexica.entrypoints=websecure
