@@ -16,8 +16,6 @@ services:
   perplexica-frontend:
     image: curtpark/perplexica-frontend:409c811
     container_name: perplexica-frontend
-    ports:
-      - 3000:3000
     environment:
       # need to build with these as args.
       - NEXT_PUBLIC_API_URL=https://perplexica.${DOMAIN}/api
@@ -37,8 +35,6 @@ services:
   perplexica-backend:
     image: itzcrazykns1337/perplexica-backend:main
     container_name: perplexica-backend
-    ports:
-      - 3001:3001
     environment:
       - SEARXNG_API_URL=http://searxng:8080
     labels:
