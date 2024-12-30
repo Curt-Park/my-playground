@@ -21,7 +21,7 @@ services:
     environment:
       # need to build with these as args.
       - NEXT_PUBLIC_API_URL=https://perplexica.${DOMAIN}/api
-      - NEXT_PUBLIC_WS_URL=ws://perplexica-backend.${DOMAIN}
+      - NEXT_PUBLIC_WS_URL=wss://perplexica-backend.${DOMAIN}
     labels:
       - traefik.enable=true
       - traefik.http.routers.perplexica.entrypoints=websecure
