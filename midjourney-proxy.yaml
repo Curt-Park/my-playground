@@ -12,7 +12,7 @@ volumes:
 
 services:
   midjourney-proxy:
-    image: curtpark/midjourney-proxy:v5.10.0
+    image: curtpark/midjourney-proxy:v7.0.1
     container_name: midjourney-proxy
     labels:
       - traefik.enable=true
