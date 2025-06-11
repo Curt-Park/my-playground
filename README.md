@@ -80,3 +80,11 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
   - qdrant
   - traefik
   - [portainer - official integration](https://docs.goauthentik.io/integrations/services/portainer/)
+
+## Docker Build for MidJourney-Proxy
+It requires building an image for ARM64.
+
+```bash
+docker build -t curtpark/midjourney-proxy:$VERSION -f src/Midjourney.API/Dockerfile .
+docker push curtpark/midjourney-proxy:$VERSION
+```
