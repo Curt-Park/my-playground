@@ -87,7 +87,7 @@ services:
     image: docker.n8n.io/n8nio/n8n:1.104.2
     command: ["worker"]
     deploy:
-      replicas: 2
+      replicas: 1
     environment:
       N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
       EXECUTIONS_MODE: queue
