@@ -10,7 +10,7 @@ volumes:
     driver_opts:
       type: none
       # Google Drive for Desktop
-      device: ${HOME}/docker_volumes/portainer
+      device: .docker_volumes/portainer
       o: bind
 
 services:
