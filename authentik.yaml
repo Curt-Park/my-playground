@@ -5,11 +5,36 @@ networks:
     external: true
 
 volumes:
-  database: {}
-  redis: {}
-  media: {}
-  certs: {}
-  custom-templates: {}
+  database:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/docker_volumes/authentik/database
+      o: bind
+  redis:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/docker_volumes/authentik/redis
+      o: bind
+  media:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/docker_volumes/authentik/media
+      o: bind
+  certs:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/docker_volumes/authentik/certs
+      o: bind
+  custom-templates:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/docker_volumes/authentik/custom_templates
+      o: bind
 
 
 services:
