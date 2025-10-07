@@ -9,31 +9,31 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /Users/jinwoo.park/docker_volumes/authentik/database
+      device: ${HOME}/docker_volumes/authentik/database
       o: bind
   redis:
     driver: local
     driver_opts:
       type: none
-      device: /Users/jinwoo.park/docker_volumes/authentik/redis
+      device: ${HOME}/docker_volumes/authentik/redis
       o: bind
   media:
     driver: local
     driver_opts:
       type: none
-      device: /Users/jinwoo.park/docker_volumes/authentik/media
+      device: ${HOME}/docker_volumes/authentik/media
       o: bind
   certs:
     driver: local
     driver_opts:
       type: none
-      device: /Users/jinwoo.park/docker_volumes/authentik/certs
+      device: ${HOME}/docker_volumes/authentik/certs
       o: bind
   custom-templates:
     driver: local
     driver_opts:
       type: none
-      device: /Users/jinwoo.park/docker_volumes/authentik/custom_templates
+      device: ${HOME}/docker_volumes/authentik/custom_templates
       o: bind
 
 
