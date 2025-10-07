@@ -7,17 +7,32 @@ networks:
     external: true
 
 volumes:
-  n8n_data: {}
-  n8n-db_data: {}
-  n8n-mq_data: {}
+  n8n-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/jinwoo.park/docker_volumes/n8n/data
+      o: bind
+  n8n-database:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/jinwoo.park/docker_volumes/n8n/database
+      o: bind
+  n8n-mq:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/jinwoo.park/docker_volumes/n8n/mq
+      o: bind
 
 services:
   n8n-db:
     image: postgres:16-alpine
     container_name: n8n-db
     environment:
-      POSTGRES_DB: ${N8N_DATABASE_NAME}
-      POSTGRES_USER: ${N8N_DATABASE_USER}
+      POSTGRES_DB: ${N8N_DATABASE_NAME:-n8n}
+      POSTGRES_USER: ${N8N_DATABASE_USER:-n8n}
       POSTGRES_PASSWORD: ${N8N_DATABASE_PW}
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -h localhost -U ${N8N_DATABASE_USER} -d ${N8N_DATABASE_NAME}']
@@ -25,7 +40,7 @@ services:
       timeout: 5s
       retries: 10
     volumes:
-      - n8n-db_data:/var/lib/postgresql/data
+      - n8n-database:/var/lib/postgresql/data
     networks:
       - ingress
     restart: unless-stopped
@@ -34,7 +49,7 @@ services:
     image: redis:7.4.1
     container_name: n8n-mq
     volumes:
-      - n8n-mq_data:/data
+      - n8n-mq:/data
     networks:
       - ingress
     restart: unless-stopped
@@ -62,8 +77,8 @@ services:
       N8N_SMTP_SENDER: ${N8N_SMTP_SENDER:-${EMAIL}}
       N8N_SMTP_PASS: ${N8N_SMTP_PASS}
       # db
-      DB_POSTGRESDB_DATABASE: ${N8N_DATABASE_NAME}
-      DB_POSTGRESDB_USER: ${N8N_DATABASE_USER}
+      DB_POSTGRESDB_DATABASE: ${N8N_DATABASE_NAME:-n8n}
+      DB_POSTGRESDB_USER: ${N8N_DATABASE_USER:-n8n}
       DB_POSTGRESDB_PASSWORD: ${N8N_DATABASE_PW}
       DB_POSTGRESDB_HOST: n8n-db
       DB_POSTGRESDB_PORT: 5432
@@ -78,7 +93,7 @@ services:
     networks:
       - ingress
     volumes:
-      - n8n_data:/home/node/.n8n
+      - n8n-data:/home/node/.n8n
     depends_on:
       - n8n-db
     restart: unless-stopped
@@ -93,8 +108,8 @@ services:
       EXECUTIONS_MODE: queue
       QUEUE_BULL_REDIS_HOST: n8n-mq
       QUEUE_BULL_REDIS_PORT: 6379
-      DB_POSTGRESDB_DATABASE: ${N8N_DATABASE_NAME}
-      DB_POSTGRESDB_USER: ${N8N_DATABASE_USER}
+      DB_POSTGRESDB_DATABASE: ${N8N_DATABASE_NAME:-n8n}
+      DB_POSTGRESDB_USER: ${N8N_DATABASE_USER:-n8n}
       DB_POSTGRESDB_PASSWORD: ${N8N_DATABASE_PW}
       DB_POSTGRESDB_HOST: n8n-db
       DB_POSTGRESDB_PORT: 5432
