@@ -10,7 +10,7 @@ volumes:
     driver_opts:
       type: none
       # Google Drive for Desktop
-      device: docker_volumes/traefik
+      device: ./docker_volumes/traefik
       o: bind
 
 services:
