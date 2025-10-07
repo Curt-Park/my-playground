@@ -5,8 +5,13 @@ networks:
     external: true
 
 volumes:
-  traefik: {}
-  authelia: {}
+  traefik:
+    driver: local
+    driver_opts:
+      type: none
+      # Google Drive for Desktop
+      device: ~/docker_volumes/traefik
+      o: bind
 
 services:
   traefik:

@@ -5,7 +5,13 @@ networks:
     external: true
 
 volumes:
-  portainer_data:
+  portainer:
+    driver: local
+    driver_opts:
+      type: none
+      # Google Drive for Desktop
+      device: ~/docker_volumes/portainer
+      o: bind
 
 services:
   portainer:
@@ -19,7 +25,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - portainer_data:/data
+      - portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - ingress
