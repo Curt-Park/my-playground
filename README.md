@@ -26,24 +26,9 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
   - cloudflare-ddns
 - `authentik.yaml`
   - for the initial setup: <https://my-host/if/flow/initial-setup/>
-- `filebrowser.yaml`
 - `monolithic.yaml`
   - monolithic backend for supporting other services
 - `n8n.yaml`
-- `nocodb.yaml`
-  - nocodb
-  - nocodb-db (postgresql)
-- `qdrant.yaml`
-- `dozzle.yaml` (this requires filebrowser)
-- `searxng.yaml`: IMPORTANT! you need to add `json` in `search.formats` (`/etc/searxng/settings.yml`)
-  - searxng
-  - searxng-redis: IMPORTANT! you need to add `redis://searxng-redis:6379/0` in `redis.url` (`/etc/searxng/settings.yml`)
-- `flowise.yaml`
-  - flowise
-  - flowise-db (postgresql)
-- `perplexica.yaml` (this requires searxng and filebrowser)
-  - perplexica-frontend
-  - perplexica-backend
 
 ## Setting up authentication
 
@@ -73,18 +58,6 @@ STACK_NAME=$SERVICE_NAME make service-down # requires .env
 - outpost is only created once.
 - the following services use authentik auth.
   - n8n
-  - filebrowser
-  - n8n
     - need to set `/webhook/*` in `Unauthenticated Paths` of the n8n provider
-  - nocodb
-  - qdrant
   - traefik
   - [portainer - official integration](https://docs.goauthentik.io/integrations/services/portainer/)
-
-## Docker Build for MidJourney-Proxy
-It requires building an image for ARM64.
-
-```bash
-docker build -t curtpark/midjourney-proxy:$VERSION -f src/Midjourney.API/Dockerfile .
-docker push curtpark/midjourney-proxy:$VERSION
-```
