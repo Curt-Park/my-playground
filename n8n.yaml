@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
 
   n8n:
-    image: docker.n8n.io/n8nio/n8n:1.114.4
+    image: docker.n8n.io/n8nio/n8n:1.115.2
     container_name: n8n
     labels:
       - traefik.enable=true
@@ -99,7 +99,7 @@ services:
     restart: unless-stopped
 
   n8n-workers:
-    image: docker.n8n.io/n8nio/n8n:1.114.4
+    image: docker.n8n.io/n8nio/n8n:1.115.2
     command: ["worker"]
     deploy:
       replicas: 1
