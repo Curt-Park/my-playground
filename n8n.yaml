@@ -46,7 +46,6 @@ services:
       # General
       GENERIC_TIMEZONE: ${TIMEZONE}
       TZ: ${TIMEZONE}
-      # 
     networks:
       - ingress
     volumes:
@@ -57,8 +56,10 @@ services:
     image: n8nio/runners:2.3.5
     container_name: n8n-task-runners
     environment:
-      - N8N_RUNNERS_TASK_BROKER_URI=http://n8n:5679
-      - N8N_RUNNERS_AUTH_TOKEN=${N8N_RUNNERS_AUTH_TOKEN}
+      N8N_RUNNERS_TASK_BROKER_URI: http://n8n:5679
+      N8N_RUNNERS_AUTH_TOKEN: ${N8N_RUNNERS_AUTH_TOKEN}
+    networks:
+      - ingress
     depends_on:
       - n8n
     restart: unless-stopped
