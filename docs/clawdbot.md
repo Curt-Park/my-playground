@@ -156,6 +156,13 @@ Clawdbot data is stored at:
 - `$HOME/docker_volumes/clawdbot/config` — configuration, credentials, and session data
 - `$HOME/docker_volumes/clawdbot/workspace` — workspace files
 
+## Docker Limitations
+
+- **Global npm packages are ephemeral** — packages installed with `npm i -g` (e.g. ClawdHub) are lost when the container is recreated. Re-install after redeployment.
+- **No native app integration** — macOS app (system notifications), iOS/Android apps (camera/canvas) cannot connect to a containerized gateway.
+- **No systemd** — the gateway daemon cannot be managed via systemd. Portainer handles container lifecycle instead.
+- **Headless browser only** — no GUI inside the container, so browser-based tools (screenshots, web automation) run in headless mode only.
+
 ## Useful Knowledge
 
 ### Installing ClawdHub
