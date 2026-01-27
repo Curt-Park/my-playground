@@ -22,7 +22,7 @@ services:
   clawdbot-gateway:
     image: ${CLAWDBOT_IMAGE:-clawdbot:local}
     container_name: clawdbot-gateway
-    user: root
+    user: root # required for npm global installs (e.g. clawdhub, skills)
     labels:
       - traefik.enable=true
       - traefik.http.routers.clawdbot.entrypoints=websecure
@@ -32,8 +32,9 @@ services:
     environment:
       HOME: /home/node
       TERM: xterm-256color
-      PATH: /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/root/.bun/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_GATEWAY_TOKEN}
+      # includes Homebrew paths so the gateway process can find brew-installed tools
+      PATH: /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/root/.bun/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     volumes:
       - clawdbot-config:/home/node/.clawdbot
       - clawdbot-workspace:/home/node/clawd
