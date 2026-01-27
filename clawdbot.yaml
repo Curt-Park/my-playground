@@ -29,7 +29,6 @@ services:
       - traefik.http.routers.clawdbot.middlewares=authentik-proxy@docker
       - traefik.http.services.clawdbot.loadbalancer.server.port=18789
     environment:
-      HOME: /home/node
       TERM: xterm-256color
       CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_GATEWAY_TOKEN}
     volumes:
@@ -56,7 +55,6 @@ services:
     labels:
       - traefik.enable=false
     environment:
-      HOME: /home/node
       TERM: xterm-256color
       BROWSER: echo
     volumes:
