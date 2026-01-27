@@ -64,7 +64,7 @@ Set the config and workspace directories to point to the volume paths used by th
 export CLAWDBOT_CONFIG_DIR=~/docker_volumes/clawdbot/config
 export CLAWDBOT_WORKSPACE_DIR=~/docker_volumes/clawdbot/workspace
 export CLAWDBOT_GATEWAY_TOKEN=<token from step 4>
-docker compose run --rm clawdbot-cli onboard --no-install-daemon
+make clawdbot-cli ARGS="onboard --no-install-daemon"
 ```
 
 When prompted during onboarding:
@@ -81,29 +81,45 @@ The wizard also configures your AI provider credentials, which are stored in the
 
 ### 6. Set up providers (optional)
 
-Run these commands from the clawdbot repository to add messaging channels:
+Run these commands from **this repository** (`my-self-hosting-services`) to add messaging channels:
 
 **WhatsApp** (QR-based authentication):
 
 ```bash
-docker compose run --rm clawdbot-cli providers login
+make clawdbot-cli ARGS="providers login"
 ```
 
 **Telegram** (bot token):
 
 ```bash
-docker compose run --rm clawdbot-cli providers add --provider telegram --token "<token>"
+make clawdbot-cli ARGS='providers add --provider telegram --token "<token>"'
 ```
 
 **Discord** (bot token):
 
 ```bash
-docker compose run --rm clawdbot-cli providers add --provider discord --token "<token>"
+make clawdbot-cli ARGS='providers add --provider discord --token "<token>"'
 ```
 
 See also: [Clawdbot providers documentation](https://docs.clawd.bot/providers)
 
-### 7. Stop the local containers and remove volumes
+### 7. Configure Control UI for reverse proxy access
+
+The gateway requires device pairing for non-local connections by default. Since the gateway runs behind Traefik, the Control UI will not recognize connections as local. Add the following to `~/docker_volumes/clawdbot/config/clawdbot.json` inside the `gateway` object:
+
+```json
+"controlUi": {
+  "allowInsecureAuth": true,
+  "dangerouslyDisableDeviceAuth": true
+}
+```
+
+- `allowInsecureAuth` — allows token-only auth when the gateway sees HTTP (Traefik terminates TLS, so the gateway receives plain HTTP)
+- `dangerouslyDisableDeviceAuth` — skips device pairing, allowing access with the gateway token alone
+
+This is safe when Authentik handles authentication in front of the gateway.
+
+### 8. Stop the local containers and remove volumes
 
 If any containers were started during the above steps, stop them and remove the Docker volumes before deploying via Portainer. The volumes created by `docker compose` have incorrect mount paths and must be recreated by Portainer:
 
