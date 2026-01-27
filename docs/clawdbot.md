@@ -51,6 +51,11 @@ openssl rand -hex 32
 
 Save this value — it will be used as `CLAWDBOT_GATEWAY_TOKEN`.
 
+> If you lost the token, you can retrieve it from the config file after onboarding:
+> ```bash
+> cat ~/docker_volumes/clawdbot/config/clawdbot.json | python3 -c "import sys,json; print(json.load(sys.stdin)['gateway']['auth']['token'])"
+> ```
+
 ### 5. Run onboarding
 
 Set the config and workspace directories to point to the volume paths used by this project, then run the onboarding wizard:
@@ -113,6 +118,7 @@ Configure the following environment variables in Portainer when deploying:
 
 | Variable | Description | How to get |
 |---|---|---|
+| `HOME` | Home directory path (e.g. `/Users/<username>`) | Required for volume mount paths — other stacks inherit this automatically, but Clawdbot requires it explicitly |
 | `DOMAIN` | Your domain name | Same as other stacks |
 | `CLAWDBOT_GATEWAY_TOKEN` | Gateway authentication token | Generated in step 4 |
 

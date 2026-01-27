@@ -36,6 +36,7 @@ services:
       - clawdbot-config:/home/node/.clawdbot
       - clawdbot-workspace:/home/node/clawd
     ports:
+      - "18789:18789"
       - "18790:18790"
     networks:
       - ingress
