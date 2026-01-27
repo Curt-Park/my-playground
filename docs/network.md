@@ -5,7 +5,7 @@ The network stack (`network.yaml`) provides reverse proxy, automatic HTTPS, and 
 ## Prerequisites
 
 - [Cloudflare setup](cloudflare.md) completed (API tokens and Zone ID configured)
-- `.env` file configured with `DOMAIN`, `EMAIL`, `CF_DNS_TOKEN`, `CF_GLOBAL_TOKEN`, `DOMAIN_ZONE_ID`, and `TIMEZONE`
+- `.env` file configured with `DOMAIN`, `EMAIL`, `CF_DNS_TOKEN`, `CF_GLOBAL_TOKEN`, `DOMAIN_ZONE_ID`, and `TIMEZONE` (e.g. `America/New_York`, `America/Los_Angeles`, `Europe/London`, `Asia/Seoul`, `Asia/Tokyo`)
 - Portainer running (`make init`)
 - Ports 80, 443, and 8080 available on the host
 
