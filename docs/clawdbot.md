@@ -2,7 +2,7 @@
 
 [Clawdbot](https://docs.clawd.bot/) is a personal AI assistant that works across messaging channels (WhatsApp, Telegram, Discord, and more). The stack (`clawdbot.yaml`) deploys the gateway service with Traefik integration.
 
-See also: [Clawdbot Docker installation](https://docs.clawd.bot/install/docker)
+See also: [Clawdbot Docker installation](https://docs.clawd.bot/install/docker) | [Video guide](https://youtu.be/NhJxxv3f7lI?si=Vr38L2NWy2CPhSMa)
 
 ## Prerequisites
 
@@ -155,3 +155,23 @@ After setting up [Authentik](authentication.md), [register Clawdbot as an app](r
 Clawdbot data is stored at:
 - `$HOME/docker_volumes/clawdbot/config` — configuration, credentials, and session data
 - `$HOME/docker_volumes/clawdbot/workspace` — workspace files
+
+## Useful Knowledge
+
+### Installing ClawdHub
+
+[ClawdHub](https://docs.clawd.bot/tools/clawdhub) is the public skill registry for Clawdbot. Install it inside the gateway container:
+
+```bash
+docker exec -u root clawdbot-gateway npm i -g clawdhub undici
+```
+
+> **Note:** This is a global install inside the container and will be lost when the container is recreated. You will need to re-run this command after redeployment.
+
+Usage:
+
+```bash
+docker exec clawdbot-gateway clawdhub search "<query>"
+docker exec clawdbot-gateway clawdhub install <skill-slug>
+docker exec clawdbot-gateway clawdhub update --all
+```
