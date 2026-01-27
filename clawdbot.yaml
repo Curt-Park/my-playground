@@ -22,6 +22,7 @@ services:
   clawdbot-gateway:
     image: ${CLAWDBOT_IMAGE:-clawdbot:local}
     container_name: clawdbot-gateway
+    user: root
     labels:
       - traefik.enable=true
       - traefik.http.routers.clawdbot.entrypoints=websecure
