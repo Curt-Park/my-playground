@@ -9,13 +9,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /Users/jinwoo.park/docker_volumes/clawdbot/config
+      device: ${HOME}/docker_volumes/clawdbot/config
       o: bind
   clawdbot-workspace:
     driver: local
     driver_opts:
       type: none
-      device: /Users/jinwoo.park/docker_volumes/clawdbot/workspace
+      device: ${HOME}/docker_volumes/clawdbot/workspace
       o: bind
 
 services:

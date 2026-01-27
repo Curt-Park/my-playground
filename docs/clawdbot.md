@@ -98,12 +98,13 @@ docker compose run --rm clawdbot-cli providers add --provider discord --token "<
 
 See also: [Clawdbot providers documentation](https://docs.clawd.bot/providers)
 
-### 7. Stop the local containers
+### 7. Stop the local containers and remove volumes
 
-If any containers were started during the above steps, stop them before deploying via Portainer:
+If any containers were started during the above steps, stop them and remove the Docker volumes before deploying via Portainer. The volumes created by `docker compose` have incorrect mount paths and must be recreated by Portainer:
 
 ```bash
 docker compose down
+docker volume rm clawdbot_clawdbot-config clawdbot_clawdbot-workspace
 ```
 
 ## Environment Variables
