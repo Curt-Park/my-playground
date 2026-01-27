@@ -19,6 +19,7 @@ Follow the [deploy on Portainer](deploy-on-portainer.md) guide with **Compose pa
 
 ## Exposing via Traefik
 
+Monolithic is designed to be only accessible from docker containers in the same network.
 To make the service accessible externally, update the labels in `monolithic.yaml`:
 
 ```yaml
@@ -29,3 +30,5 @@ labels:
   - traefik.http.routers.monolithic.middlewares=authentik-proxy@docker
   - traefik.http.services.monolithic.loadbalancer.server.port=9888
 ```
+
+This requires the `DOMAIN` environment variable to be configured (in your `.env` file or in Portainer's environment variables).
