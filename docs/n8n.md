@@ -5,7 +5,11 @@
 ## Prerequisites
 
 - Network stack deployed ([network setup](network.md))
-- `.env` file configured with the variables below
+- Create the volume directory:
+  ```bash
+  mkdir -p ~/docker_volumes/n8n/data
+  ```
+- Environment variables configured (see below)
 
 ## Environment Variables
 

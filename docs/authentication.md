@@ -5,6 +5,10 @@ Authentik provides forward authentication for your services through Traefik. Eac
 ## Prerequisites
 
 - Network stack deployed ([network setup](network.md))
+- Create the volume directories:
+  ```bash
+  mkdir -p ~/docker_volumes/authentik/{database,redis,media,certs,custom_templates}
+  ```
 - Authentik stack deployed — follow the [deploy on Portainer](deploy-on-portainer.md) guide with **Compose path** set to `authentik.yaml`
 - Complete initial setup at `https://<your-domain>/if/flow/initial-setup/`
 

@@ -3,6 +3,7 @@ STACK_NAME ?= network
 
 init:
 	docker network create ingress | true
+	mkdir -p $(HOME)/docker_volumes/portainer
 	COMPOSE_PROJECT_NAME=init docker compose -f init.yaml --env-file .env up -d --remove-orphans
 
 down:
