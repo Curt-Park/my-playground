@@ -3,7 +3,7 @@ STACK_NAME ?= network
 
 init:
 	docker network create ingress | true
-	docker volume create my-playground | true
+	docker volume create my-self-hosting-services | true
 	COMPOSE_PROJECT_NAME=init docker compose -f init.yaml --env-file .env up -d --remove-orphans
 
 down:

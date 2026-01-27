@@ -15,7 +15,7 @@ volumes:
 
 services:
   traefik:
-    image: traefik:v3.1.2
+    image: traefik:latest
     container_name: traefik
     labels:
       - traefik.enable=true
@@ -72,7 +72,7 @@ services:
     restart: always
 
   cloudflare-companion:
-    image: tiredofit/traefik-cloudflare-companion
+    image: tiredofit/traefik-cloudflare-companion:latest
     container_name: cloudflare-companion
     environment:
       - CF_EMAIL=${EMAIL}
