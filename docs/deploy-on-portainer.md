@@ -10,7 +10,7 @@ The recommended way to deploy service stacks is through Portainer using your for
 4. Select **Repository** as the build method
 5. Enter your forked repository URL (e.g. `https://github.com/<your-username>/my-self-hosting-services`)
 6. Set **Compose path** to the stack file (e.g. `network.yaml`)
-7. Under **Environment variables**, click **Advanced mode** and paste the contents of your `.env` file
+7. Under **Environment variables**, click **Advanced mode** and paste the contents of your `.env` file.
 8. Click **Deploy the stack**
 
 ## Update a stack
