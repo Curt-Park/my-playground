@@ -23,7 +23,7 @@ Configure the following environment variables (in your `.env` file or in Portain
 | `N8N_SMTP_HOST` | SMTP server hostname (e.g. `smtp.gmail.com`) |
 | `N8N_SMTP_PORT` | SMTP server port (e.g. `587`) |
 | `N8N_SMTP_USER` | SMTP username (defaults to `EMAIL` if not set) |
-| `N8N_SMTP_PASS` | SMTP password or app password |
+| `N8N_SMTP_PASS` | SMTP password or [app password](https://support.google.com/accounts/answer/185833) (required for Gmail) |
 | `N8N_RUNNERS_AUTH_TOKEN` | Shared secret between n8n and the task runner |
 
 Generate `N8N_RUNNERS_AUTH_TOKEN` with:
@@ -36,9 +36,8 @@ openssl rand -base64 36 | tr -d '\n'
 
 ### n8n
 
-The main n8n server.
+The main n8n server. After [deploying](#deploy) and completing the [authentication setup](#authentication) below, n8n will be accessible at `https://n8n.<your-domain>/`.
 
-- Accessible at `n8n.your-domain`
 - Protected by Authentik forward authentication
 - External task runners enabled with Python support
 - SMTP configured for email notifications
@@ -54,9 +53,11 @@ Executes workflow tasks externally, offloading work from the main n8n process.
 
 Follow the [deploy on Portainer](deploy-on-portainer.md) guide with **Compose path** set to `n8n.yaml`.
 
-## Authentication Note
+## Authentication
 
-After setting up [Authentik](authentication.md), add `/webhook/*` to **Unauthenticated Paths** in the n8n proxy provider settings. This allows external webhook triggers to bypass authentication.
+After setting up [Authentik](authentication.md), [register n8n as an app](register-app-authentik.md) with the following note:
+
+- Add `/webhook/*` to **Unauthenticated Paths** in the n8n proxy provider settings. This allows external webhook triggers to bypass authentication.
 
 ## Volume
 

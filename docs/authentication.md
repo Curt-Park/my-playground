@@ -29,45 +29,12 @@ openssl rand -base64 60 | tr -d '\n'  # for AUTHENTIK_SECRET_KEY
 
 > **Note:** PostgreSQL limits passwords to 99 characters, so `AUTHENTIK_PG_PASS` uses a shorter output.
 
-## 1. Create a Proxy Provider
+## Register apps
 
-*The provider defines how to authenticate and which external host to protect.*
+After Authentik is running, follow the [register an app with Authentik](register-app-authentik.md) guide for each service you want to protect.
 
-1. Go to authentik -> admin interface
-2. Application -> Provider -> Create -> Select `Proxy Provider`
-3. Configure:
-   - Name: `service_name`
-   - Authorization flow: `default-provider-authorization-explicit-consent (Authorize Application)`
-   - Forward Auth (External Host): `https://service_name.<your-domain>`
+### Service-Specific Notes
 
-## 2. Create an Application
-
-*The application represents the service being protected and links to the provider.*
-
-1. Application -> Application -> Create
-2. Configure:
-   - Name: `service_name`
-   - Slug: `service_name`
-   - Provider: `service_name` (select the provider created above)
-
-## 3. Create/Configure Outpost
-
-*The outpost is the forward auth middleware that enforces authentication. Create once and reuse for multiple services.*
-
-1. Application -> Outposts -> Create (if not already created)
-2. Configure:
-   - Name: `ForwardAuth`
-   - Type: `Proxy`
-   - Applications: Select `service_name` (or multiple services)
-
-## 4. Deploy the Outpost
-
-1. Click the outpost -> Click `Outpost Deployment Info`
-2. Copy the `Authentik Token`
-3. Add the token to your `.env` file as `AUTHENTIK_ACCESS_TOKEN` and redeploy the Authentik stack
-
-## Service-Specific Notes
-
-- **n8n**: Add `/webhook/*` to `Unauthenticated Paths` in the n8n provider settings
+- **n8n**: Add `/webhook/*` to `Unauthenticated Paths` in the n8n provider settings (see [n8n setup](n8n.md))
 - **Traefik**: Protected by default via `authentik-proxy@docker` middleware
 - **Portainer**: Use the [official Authentik integration](https://docs.goauthentik.io/integrations/services/portainer/)
