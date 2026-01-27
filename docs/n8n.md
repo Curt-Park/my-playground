@@ -9,15 +9,24 @@
 
 ## Environment Variables
 
-Add these to your `.env` file:
+Configure the following environment variables (in your `.env` file or in Portainer's environment variables):
 
 | Variable | Description |
 |---|---|
+| `DOMAIN` | Your domain name — n8n is served at `https://n8n.<DOMAIN>/` |
+| `EMAIL` | Used as default for `N8N_SMTP_USER` and `N8N_SMTP_SENDER` if not set |
+| `TIMEZONE` | Timezone for n8n (e.g. `Asia/Seoul`, `America/New_York`) |
 | `N8N_SMTP_HOST` | SMTP server hostname (e.g. `smtp.gmail.com`) |
 | `N8N_SMTP_PORT` | SMTP server port (e.g. `587`) |
 | `N8N_SMTP_USER` | SMTP username (defaults to `EMAIL` if not set) |
 | `N8N_SMTP_PASS` | SMTP password or app password |
-| `N8N_RUNNERS_AUTH_TOKEN` | Shared secret between n8n and the task runner (generate a random string) |
+| `N8N_RUNNERS_AUTH_TOKEN` | Shared secret between n8n and the task runner |
+
+Generate `N8N_RUNNERS_AUTH_TOKEN` with:
+
+```bash
+openssl rand -base64 36 | tr -d '\n'
+```
 
 ## Services
 
@@ -39,11 +48,7 @@ Executes workflow tasks externally, offloading work from the main n8n process.
 
 ## Deploy
 
-```bash
-STACK_NAME=n8n make service-up
-```
-
-Or deploy via Portainer by uploading `n8n.yaml` as a stack with `.env` variables.
+Follow the [deploy on Portainer](deploy-on-portainer.md) guide with **Compose path** set to `n8n.yaml`.
 
 ## Authentication Note
 

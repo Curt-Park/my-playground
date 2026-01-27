@@ -34,25 +34,8 @@ This command:
 
 Once running, open Portainer at `http://<hostname>:9000/` and create your admin account.
 
-## 3. Deploy services via Portainer (recommended)
+## 3. Deploy service stacks
 
-The recommended way to deploy services is through Portainer using your forked Git repository.
-
-1. Open Portainer and go to **Stacks** -> **Add stack**
-2. Select **Repository** as the build method
-3. Enter your forked repository URL (e.g. `https://github.com/<your-username>/my-self-hosting-services`)
-4. Set the **Compose path** to the stack file (e.g. `network.yaml`, `authentik.yaml`, `n8n.yaml`)
-5. Add the environment variables from your `.env` file under **Environment variables**
-6. Deploy the stack
-
-This allows Portainer to pull and redeploy stacks directly from your repository when you push changes.
-
-### Alternative: CLI deployment
-
-```bash
-STACK_NAME=network make service-up
-STACK_NAME=authentik make service-up
-STACK_NAME=n8n make service-up
-```
+After Portainer is running, deploy stacks following the [deploy on Portainer](deploy-on-portainer.md) guide.
 
 Deploy in this order: **network** -> **authentik** -> other services.

@@ -37,17 +37,14 @@ Updates the root domain's A record to the host's current public IP.
 
 ## Deploy
 
-```bash
-STACK_NAME=network make service-up
-```
-
-Or deploy via Portainer by uploading `network.yaml` as a stack with `.env` variables.
+Follow the [deploy on Portainer](deploy-on-portainer.md) guide with **Compose path** set to `network.yaml`.
 
 ## Verify
 
 1. Check that Traefik is running: open `http://<hostname>:8080` for the dashboard
 2. Confirm the wildcard certificate was issued: check the Traefik dashboard under **HTTPS** -> **Certificates**
-3. Verify DNS records were created in your Cloudflare dashboard
+3. DNS records in Cloudflare are automatically created and updated — Cloudflare Companion creates CNAME records for new services, and Cloudflare DDNS keeps the root domain's A record pointing to your current public IP. No manual DNS configuration is needed after deploying this stack.
+4. `https://portainer.<your-domain>/` will be available after this step
 
 ## Volume
 

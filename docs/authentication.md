@@ -4,16 +4,26 @@ Authentik provides forward authentication for your services through Traefik. Eac
 
 ## Prerequisites
 
-- Authentik service must be running (deployed via `authentik.yaml`)
+- Network stack deployed ([network setup](network.md))
+- Authentik stack deployed — follow the [deploy on Portainer](deploy-on-portainer.md) guide with **Compose path** set to `authentik.yaml`
 - Complete initial setup at `https://<your-domain>/if/flow/initial-setup/`
 
-Before deploying, add these variables to your `.env`:
+Before deploying, configure the following environment variables (in your `.env` file or in Portainer's environment variables):
 
 | Variable | Description |
 |---|---|
-| `AUTHENTIK_PG_PASS` | PostgreSQL password for Authentik database |
-| `AUTHENTIK_SECRET_KEY` | Secret key for Authentik (generate a random string) |
-| `AUTHENTIK_ACCESS_TOKEN` | Outpost token (obtained in step 4 below) |
+| `DOMAIN` | Your domain name — Authentik is served at `https://<DOMAIN>/` |
+| `AUTHENTIK_PG_PASS` | PostgreSQL password for Authentik database (max 99 characters) |
+| `AUTHENTIK_SECRET_KEY` | Secret key for Authentik |
+
+Generate `AUTHENTIK_PG_PASS` and `AUTHENTIK_SECRET_KEY` with `openssl`:
+
+```bash
+openssl rand -base64 36 | tr -d '\n'  # for AUTHENTIK_PG_PASS
+openssl rand -base64 60 | tr -d '\n'  # for AUTHENTIK_SECRET_KEY
+```
+
+> **Note:** PostgreSQL limits passwords to 99 characters, so `AUTHENTIK_PG_PASS` uses a shorter output.
 
 ## 1. Create a Proxy Provider
 
@@ -50,7 +60,7 @@ Before deploying, add these variables to your `.env`:
 
 1. Click the outpost -> Click `Outpost Deployment Info`
 2. Copy the `Authentik Token`
-3. Add the token to your `.env` file as `AUTHENTIK_ACCESS_TOKEN`
+3. Add the token to your `.env` file as `AUTHENTIK_ACCESS_TOKEN` and redeploy the Authentik stack
 
 ## Service-Specific Notes
 

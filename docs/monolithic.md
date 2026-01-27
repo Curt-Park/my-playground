@@ -15,11 +15,7 @@ The monolithic backend (`monolithic.yaml`) is a supporting microservice for othe
 
 ## Deploy
 
-```bash
-STACK_NAME=monolithic make service-up
-```
-
-Or deploy via Portainer by uploading `monolithic.yaml` as a stack.
+Follow the [deploy on Portainer](deploy-on-portainer.md) guide with **Compose path** set to `monolithic.yaml`.
 
 ## Exposing via Traefik
 
