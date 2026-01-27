@@ -30,6 +30,7 @@ The infrastructure uses Traefik as a reverse proxy with automatic HTTPS via Let'
 
 **Services**
 - **n8n**: Workflow automation with task runners
+- **Clawdbot**: Personal AI assistant across messaging channels
 - **Monolithic backend**: Supporting microservices for other applications
 
 ## How to Setup
@@ -43,7 +44,8 @@ The infrastructure uses Traefik as a reverse proxy with automatic HTTPS via Let'
 ### Service Stack Deployment
 
 1. [n8n](docs/n8n.md) - Workflow automation with task runners
-2. [Monolithic](docs/monolithic.md) - Monolithic backend service
+2. [Clawdbot](docs/clawdbot.md) - Personal AI assistant
+3. [Monolithic](docs/monolithic.md) - Monolithic backend service
 
 ### Optional
 

@@ -1,0 +1,72 @@
+---
+networks:
+  ingress:
+    name: ingress
+    external: true
+
+volumes:
+  clawdbot-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${HOME}/docker_volumes/clawdbot/config
+      o: bind
+  clawdbot-workspace:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${HOME}/docker_volumes/clawdbot/workspace
+      o: bind
+
+services:
+  clawdbot-gateway:
+    image: ${CLAWDBOT_IMAGE:-clawdbot:local}
+    container_name: clawdbot-gateway
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.clawdbot.entrypoints=websecure
+      - traefik.http.routers.clawdbot.rule=Host(`clawdbot.${DOMAIN}`)
+      - traefik.http.routers.clawdbot.middlewares=authentik-proxy@docker
+      - traefik.http.services.clawdbot.loadbalancer.server.port=18789
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_GATEWAY_TOKEN}
+    volumes:
+      - clawdbot-config:/home/node/.clawdbot
+      - clawdbot-workspace:/home/node/clawd
+    ports:
+      - "18790:18790"
+    networks:
+      - ingress
+    init: true
+    restart: unless-stopped
+    command:
+      - "node"
+      - "dist/index.js"
+      - "gateway"
+      - "--bind"
+      - "lan"
+      - "--port"
+      - "18789"
+
+  clawdbot-cli:
+    image: ${CLAWDBOT_IMAGE:-clawdbot:local}
+    container_name: clawdbot-cli
+    labels:
+      - traefik.enable=false
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      BROWSER: echo
+    volumes:
+      - clawdbot-config:/home/node/.clawdbot
+      - clawdbot-workspace:/home/node/clawd
+    networks:
+      - ingress
+    stdin_open: true
+    tty: true
+    init: true
+    entrypoint: ["node", "dist/index.js"]
+    profiles:
+      - cli

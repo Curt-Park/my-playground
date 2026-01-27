@@ -20,3 +20,4 @@ Once configured, your Docker volumes will automatically sync to Google Drive, pr
 | Traefik | `$HOME/docker_volumes/traefik` (includes `acme.json` certificates) |
 | Authentik | `$HOME/docker_volumes/authentik` (database, Redis, media, templates) |
 | n8n | `$HOME/docker_volumes/n8n/data` |
+| Clawdbot | `$HOME/docker_volumes/clawdbot` (config, workspace) |
