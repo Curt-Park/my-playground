@@ -81,27 +81,16 @@ The wizard also configures your AI provider credentials, which are stored in the
 
 ### 6. Set up providers (optional)
 
-Run these commands from **this repository** (`my-self-hosting-services`) to add messaging channels:
-
-**WhatsApp** (QR-based authentication):
+Use `make clawdbot-cli` to run CLI commands:
 
 ```bash
-make clawdbot-cli ARGS="providers login"
+make clawdbot-cli ARGS="--help"            # show available commands
+make clawdbot-cli ARGS="channels login"    # link WhatsApp Web (QR)
+make clawdbot-cli ARGS="status"            # show channel health
+make clawdbot-cli ARGS="doctor"            # health checks + quick fixes
 ```
 
-**Telegram** (bot token):
-
-```bash
-make clawdbot-cli ARGS='providers add --provider telegram --token "<token>"'
-```
-
-**Discord** (bot token):
-
-```bash
-make clawdbot-cli ARGS='providers add --provider discord --token "<token>"'
-```
-
-See also: [Clawdbot providers documentation](https://docs.clawd.bot/providers)
+See also: [Clawdbot CLI documentation](https://docs.clawd.bot/cli)
 
 ### 7. Configure Control UI for reverse proxy access
 
@@ -165,20 +154,49 @@ Clawdbot data is stored at:
 
 ## Useful Knowledge
 
-### Installing ClawdHub
+### Attaching to the container
 
-[ClawdHub](https://docs.clawd.bot/tools/clawdhub) is the public skill registry for Clawdbot. Install it inside the gateway container:
+To open a shell inside the gateway container:
 
 ```bash
-docker exec -u root clawdbot-gateway npm i -g clawdhub undici
+docker exec -it clawdbot-gateway bash
 ```
 
-> **Note:** This is a global install inside the container and will be lost when the container is recreated. You will need to re-run this command after redeployment.
+Or via Portainer: **Containers** → **clawdbot-gateway** → **Console** → **Connect**.
+
+The following sections assume you are attached to the container.
+
+### Installing ClawdHub
+
+[ClawdHub](https://docs.clawd.bot/tools/clawdhub) is the public skill registry for Clawdbot:
+
+```bash
+# Attach to clawdbot-gateway and run:
+npm i -g clawdhub undici
+```
+
+> **Note:** Global npm packages will be lost when the container is recreated. Re-run after redeployment.
 
 Usage:
 
 ```bash
-docker exec clawdbot-gateway clawdhub search "<query>"
-docker exec clawdbot-gateway clawdhub install <skill-slug>
-docker exec clawdbot-gateway clawdhub update --all
+clawdhub search "<query>"
+clawdhub install <skill-slug>
+clawdhub update --all
 ```
+
+### Installing Homebrew
+
+The gateway container (Debian-based) does not include Homebrew. To install it:
+
+```bash
+# Attach to clawdbot-gateway and run:
+apt-get update && apt-get install -y build-essential procps curl file git
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+After installation, `brew` is available in the current and new shell sessions.
+
+> **Note:** Like global npm packages, this will be lost when the container is recreated.
